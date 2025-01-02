@@ -38,12 +38,11 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CharacterDetailsScreen(
-       modifier: Modifier = Modifier,
        ktorClient: KtorClient,
-       characterId: Int
+       characterId: Int,
+       onEpisodeClick: (Int) -> Unit
 ) {
     var character by remember { mutableStateOf<CharacterDto?>(null) }
-
     val characterDataPoints: List<DataPoint> by remember {
         derivedStateOf {
             buildList {
@@ -80,7 +79,6 @@ fun CharacterDetailsScreen(
             item { LoadingState() }
             return@LazyColumn
         }
-
         // Name plate
         item {
             CharacterDetailsNamePlateComponent(
@@ -90,7 +88,6 @@ fun CharacterDetailsScreen(
         }
 
         item { Spacer(modifier = Modifier.height(8.dp)) }
-
         // Image
         item {
             SubcomposeAsyncImage(
@@ -104,7 +101,6 @@ fun CharacterDetailsScreen(
                    loading = { LoadingState() }
             )
         }
-
         // Data points
         items(characterDataPoints) {
             Spacer(modifier = Modifier.height(32.dp))
@@ -112,7 +108,6 @@ fun CharacterDetailsScreen(
         }
 
         item { Spacer(modifier = Modifier.height(32.dp)) }
-
         // Button
         item {
             Text(
@@ -129,7 +124,7 @@ fun CharacterDetailsScreen(
                           )
                           .clip(RoundedCornerShape(12.dp))
                           .clickable {
-                              // todo handle showing episodes
+                              onEpisodeClick(character!!.id)
                           }
                           .padding(vertical = 8.dp)
                           .fillMaxWidth()
