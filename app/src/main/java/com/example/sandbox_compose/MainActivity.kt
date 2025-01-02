@@ -5,14 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,13 +16,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.sandbox_compose.core.data.remote.KtorClient
 import com.example.sandbox_compose.ui.pages.CharacterDetailsScreen
-import com.example.sandbox_compose.ui.theme.RickAction
+import com.example.sandbox_compose.ui.pages.CharacterEpisodeScreen
 import com.example.sandbox_compose.ui.theme.RickPrimary
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
 
 class MainActivity : ComponentActivity() {
-    private val ktorClient = KtorClient()
 
+    private val ktorClient = KtorClient()
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +51,10 @@ class MainActivity : ComponentActivity() {
                                arguments = listOf(navArgument("characterId") { type = NavType.IntType })
                         ) { backStackEntry ->
                             val characterId = backStackEntry.arguments?.getInt("characterId") ?: -1
-                            CharacterEpisodeScreen(characterId = characterId)
+                            CharacterEpisodeScreen(
+                                   characterId = characterId,
+                                   ktorClient = ktorClient,
+                            )
                         }
                     }
                 }
@@ -63,10 +62,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun CharacterEpisodeScreen(characterId: Int) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Character episode screen: $characterId", fontSize = 28.sp, color = RickAction)
-    }
-}
+//@Composable
+//fun CharacterEpisodeScreen(characterId: Int) {
+//    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//        Text(text = "Character episode screen: $characterId", fontSize = 28.sp, color = RickAction)
+//    }
+//}

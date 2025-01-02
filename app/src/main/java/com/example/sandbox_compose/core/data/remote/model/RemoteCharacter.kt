@@ -20,7 +20,7 @@ data class RemoteCharacter(
        val type: String,
        val url: String
 ) {
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class Location(
            val name: String,
            val url: String
@@ -47,7 +47,7 @@ fun RemoteCharacter.toDomainCharacter(): CharacterDto {
     }
     return CharacterDto(
            created = created,
-           episodeUrls = episode,
+           episodeIds = episode.map { it.substring(it.lastIndexOf("/") + 1).toInt() },
            gender = characterGender,
            id = id,
            imageUrl = image,

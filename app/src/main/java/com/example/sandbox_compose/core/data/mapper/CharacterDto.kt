@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 data class CharacterDto(
        val created: String,
-       val episodeUrls: List<String>,
+       val episodeIds: List<Int>,
        val gender: CharacterGender,
        val id: Int,
        val imageUrl: String,

@@ -1,8 +1,11 @@
 package com.example.sandbox_compose.core.data.remote
 
 import com.example.sandbox_compose.core.data.mapper.CharacterDto
+import com.example.sandbox_compose.core.data.mapper.EpisodeDto
 import com.example.sandbox_compose.core.data.remote.model.RemoteCharacter
+import com.example.sandbox_compose.core.data.remote.model.RemoteEpisode
 import com.example.sandbox_compose.core.data.remote.model.toDomainCharacter
+import com.example.sandbox_compose.core.data.remote.model.toDomainEpisode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -30,7 +33,6 @@ class KtorClient {
             })
         }
     }
-
     private var characterCache = mutableMapOf<Int, CharacterDto>()
 
     suspend fun getCharacters(id: Int): ApiOperation<CharacterDto> {
@@ -40,6 +42,16 @@ class KtorClient {
                    .body<RemoteCharacter>()
                    .toDomainCharacter()
                    .also { characterCache[id] = it }
+        }
+    }
+
+    suspend fun getEpisodes(episodesIds: List<Int>): ApiOperation<List<EpisodeDto>> {
+        val idsCommaSeparated = episodesIds.joinToString(separator = ",")
+        return safeApiCall {
+            client.get("episode/$idsCommaSeparated")
+                   .body<List<RemoteEpisode>>()
+                   .map { it.toDomainEpisode() }
+            //.also { characterCache[id] = it }
         }
     }
 

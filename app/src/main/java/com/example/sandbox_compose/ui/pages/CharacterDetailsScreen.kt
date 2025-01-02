@@ -54,7 +54,7 @@ fun CharacterDetailsScreen(
                         add(DataPoint("Type", type))
                     }
                     add(DataPoint("Origin", character.origin.name))
-                    add(DataPoint("Episode count", character.episodeUrls.size.toString()))
+                    add(DataPoint("Episode count", character.episodeIds.size.toString()))
                 }
             }
         }
@@ -134,8 +134,7 @@ fun CharacterDetailsScreen(
     }
 }
 
-@Composable
-private fun LoadingState() {
+@Composable fun LoadingState() {
     CircularProgressIndicator(
            modifier = Modifier
                   .fillMaxSize()
