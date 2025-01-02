@@ -25,8 +25,8 @@ import com.example.sandbox_compose.ui.theme.RickPrimary
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
 
 class MainActivity : ComponentActivity() {
-
     private val ktorClient = KtorClient()
+
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
