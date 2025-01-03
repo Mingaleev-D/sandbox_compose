@@ -1,10 +1,13 @@
 package com.example.sandbox_compose.core.data.remote
 
 import com.example.sandbox_compose.core.data.mapper.CharacterDto
+import com.example.sandbox_compose.core.data.mapper.CharacterPageDto
 import com.example.sandbox_compose.core.data.mapper.EpisodeDto
 import com.example.sandbox_compose.core.data.remote.model.RemoteCharacter
+import com.example.sandbox_compose.core.data.remote.model.RemoteCharacterPage
 import com.example.sandbox_compose.core.data.remote.model.RemoteEpisode
 import com.example.sandbox_compose.core.data.remote.model.toDomainCharacter
+import com.example.sandbox_compose.core.data.remote.model.toDomainCharacterPage
 import com.example.sandbox_compose.core.data.remote.model.toDomainEpisode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -68,6 +71,14 @@ class KtorClient {
         }
     }
 
+    suspend fun getCharacterByPage(pageNumber: Int): ApiOperation<CharacterPageDto> {
+        return safeApiCall {
+            client.get("character/?page=$pageNumber")
+                   .body<RemoteCharacterPage>()
+                   .toDomainCharacterPage()
+        }
+    }
+
     private inline fun <T> safeApiCall(apiCall: () -> T): ApiOperation<T> {
         return try {
             ApiOperation.Success(data = apiCall())
@@ -90,6 +101,7 @@ sealed interface ApiOperation<T> {
         if (this is Failure) block(exception)
         return this
     }
+
     fun <R> mapSuccess(transform: (T) -> R): ApiOperation<R> {
         return when (this) {
             is Success -> Success(transform(data))

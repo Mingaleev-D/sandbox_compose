@@ -16,6 +16,7 @@ import androidx.navigation.navArgument
 import com.example.sandbox_compose.core.data.remote.KtorClient
 import com.example.sandbox_compose.ui.pages.CharacterDetailsScreen
 import com.example.sandbox_compose.ui.pages.CharacterEpisodeScreen
+import com.example.sandbox_compose.ui.pages.HomeScreen
 import com.example.sandbox_compose.ui.theme.RickPrimary
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,12 +41,23 @@ class MainActivity : ComponentActivity() {
                               .fillMaxSize(),
                        containerColor = RickPrimary
                 ) {
-                    NavHost(navController = navController, startDestination = "character_details") {
-                        composable("character_details") {
-                            CharacterDetailsScreen(
-                                  // ktorClient = ktorClient,
-                                   characterId = 2
-                            ) {
+                    NavHost(navController = navController, startDestination = "home_screen") {
+
+                        composable(route = "home_screen") {
+                            HomeScreen(onCharacterSelected = { characterId ->
+                                navController.navigate("character_details/$characterId")
+                            })
+                        }
+
+                        composable(
+                               route = "character_details/{characterId}",
+                               arguments = listOf(navArgument("characterId") {
+                                   type = NavType.IntType
+                               })
+                        ) { backStackEntry ->
+                            val characterId: Int =
+                                   backStackEntry.arguments?.getInt("characterId") ?: -1
+                            CharacterDetailsScreen(characterId = characterId) {
                                 navController.navigate("character_episodes/$it")
                             }
                         }
