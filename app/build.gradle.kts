@@ -64,7 +64,9 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.8.4")
 
+    implementation("io.coil-kt.coil3:coil:3.0.4")
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
     implementation ("com.google.code.gson:gson:2.8.7")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -72,5 +74,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
 }
