@@ -3,6 +3,7 @@ package com.example.sandbox_compose.ui.pages
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +34,7 @@ import com.example.sandbox_compose.ui.components.CharacterNameComponent
 import com.example.sandbox_compose.ui.components.DataPoint
 import com.example.sandbox_compose.ui.components.DataPointComponent
 import com.example.sandbox_compose.ui.components.EpisodeRowComponent
+import com.example.sandbox_compose.ui.components.SimpleToolbar
 import com.example.sandbox_compose.ui.theme.RickPrimary
 import com.example.sandbox_compose.ui.theme.RickTextPrimary
 import kotlinx.coroutines.launch
@@ -40,7 +42,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun CharacterEpisodeScreen(
        characterId: Int,
-       ktorClient: KtorClient
+       ktorClient: KtorClient,
+       onBackClicked: () -> Unit
 ) {
     var characterState by remember { mutableStateOf<CharacterDto?>(null) }
     var episodesState by remember { mutableStateOf<List<EpisodeDto>>(emptyList()) }
@@ -67,7 +70,9 @@ fun CharacterEpisodeScreen(
     characterState?.let { character ->
         MainScreen(
                character = character,
-               episodes = episodesState
+               episodes = episodesState,
+               onBackClicked = onBackClicked
+
         )
     } ?: LoadingState()
 }
@@ -76,38 +81,45 @@ fun CharacterEpisodeScreen(
 @Composable
 private fun MainScreen(
        character: CharacterDto,
-       episodes: List<EpisodeDto>
+       episodes: List<EpisodeDto>,
+       onBackClicked: () -> Unit
 ) {
     val episodeBySeasonMap = episodes.groupBy { it.seasonNumber }
 
-    LazyColumn(contentPadding = PaddingValues(all = 16.dp)) {
-        item { CharacterNameComponent(name = character.name) }
-        item { Spacer(modifier = Modifier.height(8.dp)) }
-        item {
-            LazyRow {
-                episodeBySeasonMap.forEach { mapEntry ->
-                    val title = "Season ${mapEntry.key}"
-                    val description = "${mapEntry.value.size} ep"
-                    item {
-                        DataPointComponent(dataPoint = DataPoint(title, description))
-                        Spacer(modifier = Modifier.width(32.dp))
+    Column {
+        SimpleToolbar(title = "Character episodes", onBackAction = onBackClicked)
+
+        LazyColumn(contentPadding = PaddingValues(all = 16.dp)) {
+            item { CharacterNameComponent(name = character.name) }
+            item { Spacer(modifier = Modifier.height(8.dp)) }
+            item {
+                LazyRow {
+                    episodeBySeasonMap.forEach { mapEntry ->
+                        val title = "Season ${mapEntry.key}"
+                        val description = "${mapEntry.value.size} ep"
+                        item {
+                            DataPointComponent(dataPoint = DataPoint(title, description))
+                            Spacer(modifier = Modifier.width(32.dp))
+                        }
                     }
                 }
             }
-        }
-        item { Spacer(modifier = Modifier.height(16.dp)) }
-        item { CharacterImage(imageUrl = character.imageUrl) }
-        item { Spacer(modifier = Modifier.height(32.dp)) }
-
-        episodeBySeasonMap.forEach { mapEntry ->
-            stickyHeader { SeasonHeader(seasonNumber = mapEntry.key) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
-            items(mapEntry.value) { episode ->
-                EpisodeRowComponent(episode = episode)
-                Spacer(modifier = Modifier.height(16.dp))
+            item { CharacterImage(imageUrl = character.imageUrl) }
+            item { Spacer(modifier = Modifier.height(32.dp)) }
+
+            episodeBySeasonMap.forEach { mapEntry ->
+                stickyHeader { SeasonHeader(seasonNumber = mapEntry.key) }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+                items(mapEntry.value) { episode ->
+                    EpisodeRowComponent(episode = episode)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
+
     }
+
 }
 
 @Composable
