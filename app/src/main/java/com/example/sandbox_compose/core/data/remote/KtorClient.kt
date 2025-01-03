@@ -3,12 +3,15 @@ package com.example.sandbox_compose.core.data.remote
 import com.example.sandbox_compose.core.data.mapper.CharacterDto
 import com.example.sandbox_compose.core.data.mapper.CharacterPageDto
 import com.example.sandbox_compose.core.data.mapper.EpisodeDto
+import com.example.sandbox_compose.core.data.mapper.EpisodePageDto
 import com.example.sandbox_compose.core.data.remote.model.RemoteCharacter
 import com.example.sandbox_compose.core.data.remote.model.RemoteCharacterPage
 import com.example.sandbox_compose.core.data.remote.model.RemoteEpisode
+import com.example.sandbox_compose.core.data.remote.model.RemoteEpisodePage
 import com.example.sandbox_compose.core.data.remote.model.toDomainCharacter
 import com.example.sandbox_compose.core.data.remote.model.toDomainCharacterPage
 import com.example.sandbox_compose.core.data.remote.model.toDomainEpisode
+import com.example.sandbox_compose.core.data.remote.model.toDomainEpisodePage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -19,6 +22,8 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 class KtorClient {
@@ -77,6 +82,49 @@ class KtorClient {
                    .body<RemoteCharacterPage>()
                    .toDomainCharacterPage()
         }
+    }
+
+    suspend fun getEpisodesByPage(pageIndex: Int): ApiOperation<EpisodePageDto> {
+        return safeApiCall {
+            client.get("episode") {
+                url {
+                    parameters.append("page", pageIndex.toString())
+                }
+            }
+                   .body<RemoteEpisodePage>()
+                   .toDomainEpisodePage()
+        }
+    }
+
+    suspend fun getAllEpisodes(): ApiOperation<List<EpisodeDto>> {
+        val data = mutableListOf<EpisodeDto>()
+        var exception: Exception? = null
+
+        coroutineScope {
+            launch {
+                getEpisodesByPage(pageIndex = 1).onSuccess { firstPage ->
+                    val totalPageCount = firstPage.info.pages
+                    data.addAll(firstPage.episodes)
+
+                    repeat(totalPageCount - 1) { index ->
+                        launch {
+                            getEpisodesByPage(pageIndex = index + 2).onSuccess { nextPage ->
+                                data.addAll(nextPage.episodes)
+                            }.onFailure { error ->
+                                exception = error
+                            }
+                        }
+                        if (exception == null) {
+                            return@onSuccess
+                        }
+                    }
+                }.onFailure {
+                    exception = it
+                }
+            }
+        }
+
+        return exception?.let { ApiOperation.Failure(it) } ?: ApiOperation.Success(data)
     }
 
     private inline fun <T> safeApiCall(apiCall: () -> T): ApiOperation<T> {
