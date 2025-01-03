@@ -45,13 +45,26 @@ class KtorClient {
         }
     }
 
-    suspend fun getEpisodes(episodesIds: List<Int>): ApiOperation<List<EpisodeDto>> {
-        val idsCommaSeparated = episodesIds.joinToString(separator = ",")
+    suspend fun getEpisodes(episodeIds: List<Int>): ApiOperation<List<EpisodeDto>> {
+        return if (episodeIds.size == 1) {
+            getEpisode(episodeIds[0]).mapSuccess {
+                listOf(it)
+            }
+        } else {
+            val idsCommaSeparated = episodeIds.joinToString(separator = ",")
+            safeApiCall {
+                client.get("episode/$idsCommaSeparated")
+                       .body<List<RemoteEpisode>>()
+                       .map { it.toDomainEpisode() }
+            }
+        }
+    }
+
+    private suspend fun getEpisode(episodeId: Int): ApiOperation<EpisodeDto> {
         return safeApiCall {
-            client.get("episode/$idsCommaSeparated")
-                   .body<List<RemoteEpisode>>()
-                   .map { it.toDomainEpisode() }
-            //.also { characterCache[id] = it }
+            client.get("episode/$episodeId")
+                   .body<RemoteEpisode>()
+                   .toDomainEpisode()
         }
     }
 
@@ -76,5 +89,11 @@ sealed interface ApiOperation<T> {
     fun onFailure(block: (Exception) -> Unit): ApiOperation<T> {
         if (this is Failure) block(exception)
         return this
+    }
+    fun <R> mapSuccess(transform: (T) -> R): ApiOperation<R> {
+        return when (this) {
+            is Success -> Success(transform(data))
+            is Failure -> Failure(exception)
+        }
     }
 }

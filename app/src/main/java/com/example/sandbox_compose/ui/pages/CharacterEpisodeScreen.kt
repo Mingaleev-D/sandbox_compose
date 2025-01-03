@@ -51,7 +51,7 @@ fun CharacterEpisodeScreen(
                    characterState = character
                    launch {
                        ktorClient
-                              .getEpisodes(episodesIds = character.episodeIds)
+                              .getEpisodes(episodeIds = character.episodeIds)
                               .onSuccess { episodes ->
                                   episodesState = episodes
                               }
