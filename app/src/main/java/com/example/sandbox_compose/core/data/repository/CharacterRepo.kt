@@ -11,13 +11,21 @@ class CharacterRepo @Inject constructor(
        private val ktorClient: KtorClient
 ) {
 
-    suspend fun fetchCharacterPage(page: Int): ApiOperation<CharacterPageDto> {
-        return ktorClient.getCharacterByPage(pageNumber = page)
+    suspend fun fetchCharacterPage(
+           page: Int,
+           params: Map<String, String> = emptyMap()
+    ): ApiOperation<CharacterPageDto> {
+        return ktorClient.getCharacterByPage(pageNumber = page, queryParams = params)
     }
+
 
     suspend fun fetchCharacter(characterId: Int): ApiOperation<CharacterDto> {
         return ktorClient.getCharacters(characterId)
     }
 
     suspend fun fetchAllEpisodes(): ApiOperation<List<EpisodeDto>> = ktorClient.getAllEpisodes()
+
+    suspend fun fetchAllCharactersByName(searchQuery: String): ApiOperation<List<CharacterDto>> {
+        return ktorClient.searchAllCharactersByName(searchQuery)
+    }
 }

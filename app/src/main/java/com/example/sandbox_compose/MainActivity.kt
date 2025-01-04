@@ -43,6 +43,7 @@ import com.example.sandbox_compose.ui.pages.AllEpisodesScreen
 import com.example.sandbox_compose.ui.pages.CharacterDetailsScreen
 import com.example.sandbox_compose.ui.pages.CharacterEpisodeScreen
 import com.example.sandbox_compose.ui.pages.HomeScreen
+import com.example.sandbox_compose.ui.pages.SearchScreen
 import com.example.sandbox_compose.ui.theme.RickAction
 import com.example.sandbox_compose.ui.theme.RickPrimary
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
@@ -188,7 +189,7 @@ private fun NavigationHost(
                    verticalArrangement = Arrangement.Center,
                    horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Search", fontSize = 62.sp, color = Color.White)
+                SearchScreen()
             }
         }
     }
