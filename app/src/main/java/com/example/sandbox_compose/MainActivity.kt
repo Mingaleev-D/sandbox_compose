@@ -39,6 +39,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.sandbox_compose.core.data.remote.KtorClient
+import com.example.sandbox_compose.ui.pages.AllEpisodesScreen
 import com.example.sandbox_compose.ui.pages.CharacterDetailsScreen
 import com.example.sandbox_compose.ui.pages.CharacterEpisodeScreen
 import com.example.sandbox_compose.ui.pages.HomeScreen
@@ -175,10 +176,10 @@ private fun NavigationHost(
         composable(route = NavDestination.Episodes.route) {
             Column(
                    modifier = Modifier.fillMaxSize(),
-                   verticalArrangement = Arrangement.Center,
-                   horizontalAlignment = Alignment.CenterHorizontally
+//                   verticalArrangement = Arrangement.Center,
+//                   horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Episodes", fontSize = 62.sp, color = Color.White)
+                AllEpisodesScreen()
             }
         }
         composable(route = NavDestination.Search.route) {
