@@ -12,13 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-       primary = Purple80,
+       primary = BlackGreen,
        secondary = PurpleGrey80,
        tertiary = Pink80
 )
 
 private val LightColorScheme = lightColorScheme(
-       primary = Purple40,
+       primary = BlackGreen,
        secondary = PurpleGrey40,
        tertiary = Pink40
 
@@ -52,7 +52,7 @@ fun Sandbox_composeTheme(
 
     MaterialTheme(
            colorScheme = colorScheme,
-           typography = Typography,
+           typography = AppTypography,
            content = content
     )
 }

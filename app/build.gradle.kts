@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("kapt")
-    id("com.google.dagger.hilt.android")
+   // id("com.google.dagger.hilt.android")
     kotlin("plugin.serialization") version "2.0.20"
 }
 
@@ -68,14 +68,18 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4") // Only available on Android/JVM.
+    implementation("io.coil-kt.coil3:coil-network-ktor2:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.4")
+
     implementation ("com.google.code.gson:gson:2.8.7")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+//    implementation("com.google.dagger:hilt-android:2.51.1")
+//    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+//    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
     implementation("io.ktor:ktor-client-core:3.0.3")
     implementation("io.ktor:ktor-client-okhttp:3.0.3")

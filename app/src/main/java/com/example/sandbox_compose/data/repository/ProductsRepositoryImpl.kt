@@ -9,7 +9,7 @@ class ProductsRepositoryImpl(
        private val apiService: ApiService
 ) : ProductsRepository {
 
-    override suspend fun getProducts(): ResultWrapper<List<ProductsItem>> {
-        return apiService.getProducts()
+    override suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>> {
+        return apiService.getProducts(category = category)
     }
 }

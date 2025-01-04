@@ -11,15 +11,21 @@ import io.ktor.client.request.request
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
+import io.ktor.http.appendEncodedPathSegments
 import io.ktor.http.contentType
 import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.errors.IOException
 
+// private val baseUrl = "https://fakestoreapi.com"
 class ApiServicesImpl(val client: HttpClient) : ApiService {
 
-    override suspend fun getProducts(): ResultWrapper<List<ProductsItem>> {
+    private val baseUrl = "https://fakestores.onrender.com/api/"
+
+    override suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>> {
+        val url = if (category != null) "${baseUrl}products/category/$category" else "${baseUrl}products"
+
         return makeWebRequest(
-               url = "https://fakestoreapi.com/products",
+               url = url,
                method = HttpMethod.Get,
                mapper = { dataModels: List<DataProductModel> ->
                    dataModels.map { it.toProduct() }
@@ -58,7 +64,7 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
                 // Set content type
                 contentType(ContentType.Application.Json)
             }.body<T>()
-            val result: R = mapper?.invoke(response) ?: response as R
+            val result = mapper?.invoke(response) ?: response as R
             ResultWrapper.Success(result)
         } catch (e: ClientRequestException) {
             ResultWrapper.Failure(e)
@@ -74,7 +80,7 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
 
 interface ApiService {
 
-    suspend fun getProducts(): ResultWrapper<List<ProductsItem>>
+    suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>>
 }
 
 sealed class ResultWrapper<out T> {
