@@ -77,4 +77,19 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
+    implementation("io.ktor:ktor-client-core:3.0.3")
+    implementation("io.ktor:ktor-client-okhttp:3.0.3")
+    implementation("io.ktor:ktor-client-content-negotiation:3.0.3")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.3")
+    implementation("io.ktor:ktor-client-logging:3.0.3")
+
+    // Koin for Android
+    implementation("io.insert-koin:koin-core:4.0.1")
+    implementation("io.insert-koin:koin-android:4.0.1")
+    implementation("io.insert-koin:koin-androidx-compose:4.0.1")
+//    implementation("io.insert-koin:koin-ktor:4.0.1")
+//    implementation("io.insert-koin:koin-logger-slf4j:4.0.1")
+//    implementation("io.insert-koin:koin-annotations:4.0.1")
+//    kapt("io.insert-koin:koin-ksp-compiler:4.0.1")
+
 }

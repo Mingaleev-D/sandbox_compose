@@ -4,14 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.sandbox_compose.ui.pages.home_products.HomePage
 
 class MainActivity : ComponentActivity() {
 
@@ -19,25 +15,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyApp()
-
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "home_products") {
+                composable(route = "home_products") {
+                    HomePage(navController = navController)
+                }
+            }
         }
-    }
-}
-
-@Composable
-fun MyApp(modifier: Modifier = Modifier) {
-    Sandbox_composeTheme {
-        //        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        //
-        //        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Sandbox_composeTheme {
-
     }
 }
