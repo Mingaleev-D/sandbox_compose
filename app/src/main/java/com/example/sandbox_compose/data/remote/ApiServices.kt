@@ -1,7 +1,9 @@
 package com.example.sandbox_compose.data.remote
 
-import com.example.sandbox_compose.data.model.DataProductModel
-import com.example.sandbox_compose.data.model.ProductsItem
+import com.example.sandbox_compose.data.model.RemoteCategories
+import com.example.sandbox_compose.data.model.RemoteProducts
+import com.example.sandbox_compose.domain.model.CategoriesListModel
+import com.example.sandbox_compose.domain.model.ProductListModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -16,30 +18,31 @@ import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.errors.IOException
 
 // private val baseUrl = "https://fakestoreapi.com"
-val baseUrl = "https://fakestores.onrender.com/api/"
+//val baseUrl = "https://fakestores.onrender.com/api/"
+val baseUrl = "https://ecommerce-ktor-4641e7ff1b63.herokuapp.com/"
 
 class ApiServicesImpl(val client: HttpClient) : ApiService {
 
-    override suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>> {
+    override suspend fun getProducts(category: Int?): ResultWrapper<ProductListModel> {
         val url = if (category != null) "${baseUrl}products/category/$category" else "${baseUrl}products"
 
         return makeWebRequest(
                url = url,
                method = HttpMethod.Get,
-               mapper = { dataModels: List<DataProductModel> ->
-                   dataModels.map { it.toProduct() }
-               }
-        )
+               mapper = { dataModels: RemoteProducts ->
+                   dataModels.toProductList()
+               })
     }
 
-    override suspend fun getCategories(): ResultWrapper<List<String>> {
+    override suspend fun getCategories(): ResultWrapper<CategoriesListModel> {
         val url = "${baseUrl}categories"
 
-        return makeWebRequest<List<String>, List<String>>(
+        return makeWebRequest(
                url = url,
                method = HttpMethod.Get,
-               mapper = null
-        )
+               mapper = { categories: RemoteCategories ->
+                   categories.toCategoriesList()
+               })
     }
 
     @OptIn(InternalAPI::class)
@@ -89,8 +92,8 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
 
 interface ApiService {
 
-    suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>>
-    suspend fun getCategories(): ResultWrapper<List<String>>
+    suspend fun getProducts(category: Int?): ResultWrapper<ProductListModel>
+    suspend fun getCategories(): ResultWrapper<CategoriesListModel>
 }
 
 sealed class ResultWrapper<out T> {

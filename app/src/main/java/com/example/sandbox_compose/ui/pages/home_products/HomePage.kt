@@ -1,7 +1,9 @@
 package com.example.sandbox_compose.ui.pages.home_products
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,11 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,13 +24,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.sandbox_compose.data.model.ProductsItem
+import com.example.sandbox_compose.domain.model.Product
+import com.example.sandbox_compose.domain.model.ProductListModel
 import com.example.sandbox_compose.ui.components.LoadingState
 import com.example.sandbox_compose.ui.pages.home_products.components.HomeProductRow
 import com.example.sandbox_compose.ui.pages.home_products.components.ProfileHeader
 import com.example.sandbox_compose.ui.pages.home_products.components.SearchBar
+import com.example.sandbox_compose.ui.theme.BlackGreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -48,8 +49,8 @@ fun HomePage(
     Column(
            modifier = Modifier
                .fillMaxSize(),
-//           verticalArrangement = Arrangement.Center,
-//           horizontalAlignment = Alignment.CenterHorizontally
+           //           verticalArrangement = Arrangement.Center,
+           //           horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (uiState.value) {
             is HomeScreenUIEvents.Error -> {
@@ -59,6 +60,7 @@ fun HomePage(
 
             HomeScreenUIEvents.Loading -> {
                 Column(
+                       modifier = Modifier.fillMaxSize(),
                        verticalArrangement = Arrangement.Center,
                        horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -71,29 +73,19 @@ fun HomePage(
                 HomeContent(
                        featured = data.featured,
                        popularProducts = data.popularProducts,
+                       popularProductsBooks = data.popularProductsBooks,
                        categories = data.categories,
                 )
             }
         }
     }
-
-//    Scaffold(
-//           modifier = modifier
-//    ) {
-//        Surface(
-//               modifier = Modifier
-//                   .fillMaxSize()
-//                   .padding(paddingValues = it)
-//        ) {
-//
-//        }
-//    }
 }
 
 @Composable
 private fun HomeContent(
-       featured: List<ProductsItem>,
-       popularProducts: List<ProductsItem>,
+       featured: List<Product>,
+       popularProducts: List<Product>,
+       popularProductsBooks: List<Product>,
        categories: List<String>,
 ) {
     LazyColumn {
@@ -107,24 +99,30 @@ private fun HomeContent(
             if (categories.isNotEmpty()) {
                 LazyRow {
                     items(categories) { category ->
-                        Card(
+                        Box(
                                modifier = Modifier
                                    .padding(8.dp)
-                                   .border(1.dp, Color.Black, RoundedCornerShape(8.dp)),
+                                   .clip(shape = RoundedCornerShape(8.dp))
+                                   .border(
+                                          width = 1.dp,
+                                          color = BlackGreen,
+                                          shape = RoundedCornerShape(8.dp)
+                                   )
+                                   .background(color = BlackGreen),
                                // colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                               elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                               //elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                         ) {
                             Text(
                                    text = category.apply { replaceFirstChar { it.uppercase() } },
                                    style = MaterialTheme.typography.bodyMedium,
                                    modifier = Modifier
-                                       .padding(8.dp)
-                                       .clip(RoundedCornerShape(8.dp)),
+                                       //.clip(RoundedCornerShape(8.dp))
+                                       .padding(8.dp),
                                    // .background(MaterialTheme.colorScheme.primary),
                                    fontWeight = FontWeight.SemiBold,
                                    maxLines = 1,
                                    overflow = TextOverflow.Ellipsis,
-                                   color = MaterialTheme.colorScheme.primary
+                                   color = Color.White
                             )
                         }
                     }
@@ -137,6 +135,10 @@ private fun HomeContent(
             }
             if (popularProducts.isNotEmpty()) {
                 HomeProductRow(products = popularProducts, title = "Popular Products")
+                Spacer(modifier = Modifier.size(16.dp))
+            }
+            if (popularProducts.isNotEmpty()) {
+                HomeProductRow(products = popularProductsBooks, title = "Popular Books")
                 Spacer(modifier = Modifier.size(16.dp))
             }
         }

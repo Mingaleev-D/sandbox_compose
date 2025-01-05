@@ -15,11 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.sandbox_compose.data.model.ProductsItem
+import com.example.sandbox_compose.domain.model.Product
 
 @Composable
 fun HomeProductRow(
-    products: List<ProductsItem>,
+    products: List<Product>,
     title: String
 ) {
     Column {
@@ -48,7 +48,9 @@ fun HomeProductRow(
         Spacer(modifier = Modifier.size(8.dp))
         LazyRow {
             items(products) { product ->
-                ProductItemView(product = product)
+                ProductItemView(product = product){
+
+                }
             }
         }
     }

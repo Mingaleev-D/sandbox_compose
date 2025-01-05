@@ -2,8 +2,9 @@ package com.example.sandbox_compose.ui.pages.home_products
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sandbox_compose.data.model.ProductsItem
 import com.example.sandbox_compose.data.remote.ResultWrapper
+import com.example.sandbox_compose.domain.model.CategoriesListModel
+import com.example.sandbox_compose.domain.model.Product
 import com.example.sandbox_compose.domain.usecase.GetCategoriesUseCase
 import com.example.sandbox_compose.domain.usecase.GetProductsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,7 @@ class HomeViewModel(
     //    init {
     //        getAllProducts()
     //    }
-    private suspend fun getProducts(category: String?): List<ProductsItem> {
+    private suspend fun getProducts(category: Int?): List<Product> {
         productsUseCase.execute(category).let { result ->
             when (result) {
                 is ResultWrapper.Failure -> {
@@ -30,7 +31,7 @@ class HomeViewModel(
                 }
 
                 is ResultWrapper.Success -> {
-                    return result.value
+                    return result.value.products
                 }
             }
         }
@@ -39,16 +40,18 @@ class HomeViewModel(
     fun getAllProducts() {
         viewModelScope.launch {
             _uiProductsState.value = HomeScreenUIEvents.Loading
-            val featured = getProducts("electronics")
-            val popularProducts = getProducts("jewelery")
+            val featured = getProducts(1)
+            val popularProducts = getProducts(2)
+            val popularProductsBooks = getProducts(4)
             val categories = getCategories()
-            if (featured.isEmpty() && popularProducts.isEmpty() && categories.isNotEmpty()) {
+            if (featured.isEmpty() && popularProducts.isEmpty() && popularProductsBooks.isEmpty() && categories.isNotEmpty()) {
                 _uiProductsState.value = HomeScreenUIEvents.Error("Failed to load products")
                 return@launch
             }
             _uiProductsState.value = HomeScreenUIEvents.Success(
                    featured,
                    popularProducts,
+                   popularProductsBooks,
                    categories
             )
         }
@@ -62,7 +65,7 @@ class HomeViewModel(
                 }
 
                 is ResultWrapper.Success -> {
-                    return result.value
+                    return result.value.categories.map { it.title }
                 }
             }
         }
@@ -72,8 +75,9 @@ class HomeViewModel(
 sealed class HomeScreenUIEvents {
     object Loading : HomeScreenUIEvents()
     data class Success(
-           val featured: List<ProductsItem>,
-           val popularProducts: List<ProductsItem>,
+           val featured: List<Product>,
+           val popularProducts: List<Product>,
+           val popularProductsBooks: List<Product>,
            val categories: List<String>,
     ) : HomeScreenUIEvents()
 

@@ -7,12 +7,12 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val DarkColorScheme = darkColorScheme(
-       primary = Purple40,
+       primary = BlackGreen,
        secondary = PurpleGrey80,
        tertiary = Pink80
 )
 private val LightColorScheme = lightColorScheme(
-       primary = Purple40,
+       primary = BlackGreen,
        secondary = PurpleGrey40,
        tertiary = Pink40
        /* Other default colors to override

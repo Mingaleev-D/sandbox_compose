@@ -32,6 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sandbox_compose.ui.pages.home_products.HomePage
+import com.example.sandbox_compose.ui.theme.BlackGreen
 import com.example.sandbox_compose.ui.theme.Purple40
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
 
@@ -84,8 +85,8 @@ class MainActivity : ComponentActivity() {
                                               }
                                           },
                                           colors = NavigationBarItemDefaults.colors(
-                                                 selectedIconColor = Purple40,
-                                                 selectedTextColor = Purple40,
+                                                 selectedIconColor = BlackGreen,
+                                                 selectedTextColor = BlackGreen,
                                                  indicatorColor = Color.Transparent
                                           )
                                    )
