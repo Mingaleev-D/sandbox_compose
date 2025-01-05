@@ -4,6 +4,7 @@ import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.data.remote.ApiServicesImpl
 import com.example.sandbox_compose.data.repository.ProductsRepositoryImpl
 import com.example.sandbox_compose.domain.repository.ProductsRepository
+import com.example.sandbox_compose.domain.usecase.GetCategoriesUseCase
 import com.example.sandbox_compose.domain.usecase.GetProductsUseCase
 import com.example.sandbox_compose.ui.pages.home_products.HomeViewModel
 import io.ktor.client.HttpClient
@@ -62,10 +63,11 @@ val repositoryModule = module {
 }
 val useCaseModule = module {
     factory { GetProductsUseCase(get()) }
+    factory { GetCategoriesUseCase(get()) }
 }
 val viewModelModule = module {
     viewModel {
-        HomeViewModel(get())
+        HomeViewModel(get(), get())
     }
 }
 

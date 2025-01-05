@@ -6,4 +6,5 @@ import com.example.sandbox_compose.data.remote.ResultWrapper
 interface ProductsRepository {
 
     suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>>
+    suspend fun getCategories(): ResultWrapper<List<String>>
 }

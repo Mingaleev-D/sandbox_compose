@@ -1,5 +1,7 @@
 package com.example.sandbox_compose.ui.pages.home_products.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,19 +30,22 @@ fun ProductItemView(product: ProductsItem) {
     Card(
            modifier = Modifier
                .padding(horizontal = 8.dp)
-               .size(width = 126.dp, height = 144.dp),
+               .size(width = 126.dp, height = 144.dp)
+               .background(Color.Transparent),
            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
            shape = RoundedCornerShape(16.dp),
            // colors = CardDefaults.cardColors(containerColor = Color.LightGray.copy(alpha = 0.1f))
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White.copy(alpha = 0.1f))) {
             AsyncImage(
                    model = product.imageURL,
                    contentDescription = null,
                    modifier = Modifier
                        .fillMaxWidth()
                        .height(95.dp),
-                    contentScale = ContentScale.Fit
+                   contentScale = ContentScale.Fit
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
@@ -63,13 +68,4 @@ fun ProductItemView(product: ProductsItem) {
             )
         }
     }
-}
-
-@Composable fun LoadingState() {
-    CircularProgressIndicator(
-           modifier = Modifier
-               .fillMaxSize()
-               .padding(all = 128.dp),
-           color = Color.Green
-    )
 }

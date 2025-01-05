@@ -12,4 +12,8 @@ class ProductsRepositoryImpl(
     override suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>> {
         return apiService.getProducts(category = category)
     }
+
+    override suspend fun getCategories(): ResultWrapper<List<String>> {
+        return apiService.getCategories()
+    }
 }

@@ -11,15 +11,14 @@ import io.ktor.client.request.request
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
-import io.ktor.http.appendEncodedPathSegments
 import io.ktor.http.contentType
 import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.errors.IOException
 
 // private val baseUrl = "https://fakestoreapi.com"
-class ApiServicesImpl(val client: HttpClient) : ApiService {
+val baseUrl = "https://fakestores.onrender.com/api/"
 
-    private val baseUrl = "https://fakestores.onrender.com/api/"
+class ApiServicesImpl(val client: HttpClient) : ApiService {
 
     override suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>> {
         val url = if (category != null) "${baseUrl}products/category/$category" else "${baseUrl}products"
@@ -30,6 +29,16 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
                mapper = { dataModels: List<DataProductModel> ->
                    dataModels.map { it.toProduct() }
                }
+        )
+    }
+
+    override suspend fun getCategories(): ResultWrapper<List<String>> {
+        val url = "${baseUrl}categories"
+
+        return makeWebRequest<List<String>, List<String>>(
+               url = url,
+               method = HttpMethod.Get,
+               mapper = null
         )
     }
 
@@ -81,6 +90,7 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
 interface ApiService {
 
     suspend fun getProducts(category: String?): ResultWrapper<List<ProductsItem>>
+    suspend fun getCategories(): ResultWrapper<List<String>>
 }
 
 sealed class ResultWrapper<out T> {
