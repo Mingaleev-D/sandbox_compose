@@ -6,6 +6,8 @@ import com.example.sandbox_compose.data.repository.ProductsRepositoryImpl
 import com.example.sandbox_compose.domain.repository.ProductsRepository
 import com.example.sandbox_compose.domain.usecase.GetCategoriesUseCase
 import com.example.sandbox_compose.domain.usecase.GetProductsUseCase
+import com.example.sandbox_compose.ui.pages.cart.CartSummaryViewModel
+import com.example.sandbox_compose.ui.pages.cart.CartViewModel
 import com.example.sandbox_compose.ui.pages.home_products.HomeViewModel
 import com.example.sandbox_compose.ui.pages.home_products.ProductDetailViewModel
 import io.ktor.client.HttpClient
@@ -72,6 +74,12 @@ val viewModelModule = module {
     }
     viewModel {
         ProductDetailViewModel(get())
+    }
+    viewModel {
+        CartViewModel(get())
+    }
+    viewModel {
+        CartSummaryViewModel(get())
     }
 }
 
