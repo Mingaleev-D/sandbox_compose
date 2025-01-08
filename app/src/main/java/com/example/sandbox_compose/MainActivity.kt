@@ -36,9 +36,13 @@ import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.example.sandbox_compose.ui.navigator.ProductDetails
 import com.example.sandbox_compose.ui.navigator.UiProductModel
+import com.example.sandbox_compose.ui.navigator.UserAddressRoute
+import com.example.sandbox_compose.ui.navigator.UserAddressRouteWrapper
 import com.example.sandbox_compose.ui.navigator.productNavType
+import com.example.sandbox_compose.ui.navigator.userAddressNavType
 import com.example.sandbox_compose.ui.pages.cart.CartPage
 import com.example.sandbox_compose.ui.pages.cart.CartSummaryPage
+import com.example.sandbox_compose.ui.pages.cart.user_address.UserAddressPage
 import com.example.sandbox_compose.ui.pages.home_products.HomePage
 import com.example.sandbox_compose.ui.pages.home_products.ProductDetailsPage
 import com.example.sandbox_compose.ui.theme.BlackGreen
@@ -140,15 +144,23 @@ private fun NavigationHost(
                    product = productRoute.product,
                    onBackClicked = { navController.navigateUp() })
         }
-        composable(
-               route = NavDestination.Cart.route
-        ) {
+        composable(route = NavDestination.Cart.route) {
             CartPage(navController)
         }
         composable(
                route = "${NavDestination.Cart.route}/cartSummaryPage"
         ) {
             CartSummaryPage(navController = navController)
+        }
+        composable<UserAddressRoute>(
+           // route = "${NavDestination.Cart.route}/userAddressPage",
+               typeMap = mapOf(typeOf<UserAddressRouteWrapper>() to userAddressNavType)
+        ) {
+            val userAddressRoute = it.toRoute<UserAddressRoute>()
+            UserAddressPage(
+                   navController = navController,
+                   userAddress = userAddressRoute.userAddressWrapper.userAddress
+            )
         }
         composable(
                route = NavDestination.Profile.route,

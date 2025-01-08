@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.navigation.NavType
+import com.example.sandbox_compose.domain.model.AddressDomainModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URLDecoder
@@ -67,6 +68,9 @@ val productNavType = object : NavType<UiProductModel>(isNullableAllowed = false)
 data class ProductDetails(val product: UiProductModel)
 
 @Serializable
+data class UserAddressRoute(val userAddressWrapper: UserAddressRouteWrapper)
+
+@Serializable
 @Parcelize
 data class UiProductModel(
        val id: Int,
@@ -87,5 +91,57 @@ data class UiProductModel(
                description = product.description,
                image = product.image
         )
+    }
+}
+
+@Serializable
+@Parcelize
+data class UserAddress(
+       val addressLine: String,
+       val city: String,
+       val state: String,
+       val postalCode: String,
+       val country: String
+) : Parcelable {
+    override fun toString(): String {
+        return "$addressLine, $city, $state, $postalCode, $country"
+    }
+
+    fun toAddressDataModel() = AddressDomainModel(
+           addressLine,
+           city,
+           state,
+           postalCode,
+           country
+    )
+}
+
+
+@Serializable
+@Parcelize
+data class UserAddressRouteWrapper(
+       val userAddress: UserAddress?
+) : Parcelable
+
+val userAddressNavType = object : NavType<UserAddressRouteWrapper>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): UserAddressRouteWrapper? {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            return bundle.getParcelable(key, UserAddressRouteWrapper::class.java)
+        return bundle.getParcelable(key) as? UserAddressRouteWrapper
+    }
+
+    override fun parseValue(value: String): UserAddressRouteWrapper {
+        val item = Json.decodeFromString<UserAddressRouteWrapper>(value)
+        return item
+    }
+
+    override fun serializeAsValue(value: UserAddressRouteWrapper): String {
+        return Json.encodeToString(
+               value
+        )
+    }
+
+    override fun put(bundle: Bundle, key: String, value: UserAddressRouteWrapper) {
+        bundle.putParcelable(key, value)
     }
 }
