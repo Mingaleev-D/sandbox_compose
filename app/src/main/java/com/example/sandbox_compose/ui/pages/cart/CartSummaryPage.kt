@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.sandbox_compose.NavDestination
 import com.example.sandbox_compose.R
 import com.example.sandbox_compose.domain.model.CartItemModel
 import com.example.sandbox_compose.domain.model.CartSummary
@@ -42,6 +43,7 @@ import com.example.sandbox_compose.ui.navigator.UserAddress
 import com.example.sandbox_compose.ui.navigator.UserAddressRoute
 import com.example.sandbox_compose.ui.navigator.UserAddressRouteWrapper
 import com.example.sandbox_compose.ui.pages.cart.user_address.USER_ADDRESS_SCREEN
+import com.example.sandbox_compose.ui.pages.home_products.HomePage
 import com.example.sandbox_compose.utils.CurrencyUtils
 import org.koin.androidx.compose.koinViewModel
 
@@ -110,16 +112,50 @@ fun CartSummaryPage(
                 is CartSummaryEvent.Success -> {
                     Column {
                         AddressBar(address.value?.toString() ?: "", onClick = {
-                             navController.navigate(UserAddressRoute(UserAddressRouteWrapper(address.value)))
+                            navController.navigate(UserAddressRoute(UserAddressRouteWrapper(address.value)))
                         })
                         Spacer(modifier = Modifier.size(2.dp))
                         CartSummaryScreenContent(event.summary)
                     }
                 }
+
+                is CartSummaryEvent.PlaceOrder -> {
+                    Column(
+                           modifier = Modifier.fillMaxSize(),
+                           verticalArrangement = Arrangement.Center,
+                           horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                               painter = painterResource(id = R.drawable.icon_ok),
+                               contentDescription = null
+                        )
+                        Text(
+                               text = "Order Placed: ${event.orderId}",
+                               style = MaterialTheme.typography.titleMedium,
+                        )
+                        Button(onClick = {
+                            navController.popBackStack(
+                                   route = NavDestination.Home.route,
+                                   inclusive = false
+                            )
+                        }) {
+                            Text(
+                                   text = "Continue Shopping",
+                                   style = MaterialTheme.typography.titleSmall
+                            )
+                        }
+                    }
+                }
             }
         }
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Checkout", style = MaterialTheme.typography.titleMedium)
+        if (uiState.value !is CartSummaryEvent.PlaceOrder) {
+            Button(
+                   onClick = { viewModel.placeOrder(address.value!!) },
+                   modifier = Modifier.fillMaxWidth(),
+                   enabled = address.value != null
+            ) {
+                Text(text = "Checkout", style = MaterialTheme.typography.titleMedium)
+            }
         }
     }
 }

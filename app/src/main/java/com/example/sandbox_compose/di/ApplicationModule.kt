@@ -2,10 +2,13 @@ package com.example.sandbox_compose.di
 
 import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.data.remote.ApiServicesImpl
+import com.example.sandbox_compose.data.repository.OrderRepositoryImpl
 import com.example.sandbox_compose.data.repository.ProductsRepositoryImpl
+import com.example.sandbox_compose.domain.repository.OrderRepository
 import com.example.sandbox_compose.domain.repository.ProductsRepository
 import com.example.sandbox_compose.domain.usecase.GetCategoriesUseCase
 import com.example.sandbox_compose.domain.usecase.GetProductsUseCase
+import com.example.sandbox_compose.domain.usecase.PlaceOrderUseCase
 import com.example.sandbox_compose.ui.pages.cart.CartSummaryViewModel
 import com.example.sandbox_compose.ui.pages.cart.CartViewModel
 import com.example.sandbox_compose.ui.pages.home_products.HomeViewModel
@@ -63,10 +66,12 @@ val networkModule = module {
 }
 val repositoryModule = module {
     single<ProductsRepository> { ProductsRepositoryImpl(get()) }
+    single<OrderRepository> { OrderRepositoryImpl(get()) }
 }
 val useCaseModule = module {
     factory { GetProductsUseCase(get()) }
     factory { GetCategoriesUseCase(get()) }
+    factory { PlaceOrderUseCase(get()) }
 }
 val viewModelModule = module {
     viewModel {
@@ -79,7 +84,7 @@ val viewModelModule = module {
         CartViewModel(get())
     }
     viewModel {
-        CartSummaryViewModel(get())
+        CartSummaryViewModel(get(), get())
     }
 }
 
