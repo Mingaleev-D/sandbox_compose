@@ -30,6 +30,8 @@ import androidx.navigation.NavController
 import com.example.sandbox_compose.domain.model.Product
 import com.example.sandbox_compose.domain.model.ProductListModel
 import com.example.sandbox_compose.ui.components.LoadingState
+import com.example.sandbox_compose.ui.navigator.ProductDetails
+import com.example.sandbox_compose.ui.navigator.UiProductModel
 import com.example.sandbox_compose.ui.pages.home_products.components.HomeProductRow
 import com.example.sandbox_compose.ui.pages.home_products.components.ProfileHeader
 import com.example.sandbox_compose.ui.pages.home_products.components.SearchBar
@@ -75,6 +77,9 @@ fun HomePage(
                        popularProducts = data.popularProducts,
                        popularProductsBooks = data.popularProductsBooks,
                        categories = data.categories,
+                       onClick = {
+                           navController.navigate(route = ProductDetails(UiProductModel.fromProduct(it)))
+                       }
                 )
             }
         }
@@ -87,6 +92,7 @@ private fun HomeContent(
        popularProducts: List<Product>,
        popularProductsBooks: List<Product>,
        categories: List<String>,
+       onClick: (Product) -> Unit,
 ) {
     LazyColumn {
         item {
@@ -130,15 +136,23 @@ private fun HomeContent(
             }
 
             if (featured.isNotEmpty()) {
-                HomeProductRow(products = featured, title = "Featured")
+                HomeProductRow(products = featured, title = "Featured", onClick = onClick)
                 Spacer(modifier = Modifier.size(16.dp))
             }
             if (popularProducts.isNotEmpty()) {
-                HomeProductRow(products = popularProducts, title = "Popular Products")
+                HomeProductRow(
+                       products = popularProducts,
+                       title = "Popular Products",
+                       onClick = onClick
+                )
                 Spacer(modifier = Modifier.size(16.dp))
             }
             if (popularProducts.isNotEmpty()) {
-                HomeProductRow(products = popularProductsBooks, title = "Popular Books")
+                HomeProductRow(
+                       products = popularProductsBooks,
+                       title = "Popular Books",
+                       onClick = onClick
+                )
                 Spacer(modifier = Modifier.size(16.dp))
             }
         }

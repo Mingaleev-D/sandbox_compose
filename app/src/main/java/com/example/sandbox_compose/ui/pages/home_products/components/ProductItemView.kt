@@ -33,6 +33,7 @@ fun ProductItemView(
            modifier = Modifier
                .padding(horizontal = 8.dp)
                .size(width = 126.dp, height = 164.dp)
+               .clip(RoundedCornerShape(12.dp))
                .clickable { onClick(product) },
            ) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -40,10 +41,10 @@ fun ProductItemView(
                    model = product.image,
                    contentDescription = null,
                    modifier = Modifier
-                       // .fillMaxSize()
+                        .weight(1f).fillMaxSize()
                        .clip(RoundedCornerShape(12.dp))
                        .height(106.dp),
-                   contentScale = ContentScale.Crop,
+                   contentScale = ContentScale.FillBounds,
                    error = painterResource(R.drawable.error_img)
             )
             Spacer(modifier = Modifier.size(8.dp))

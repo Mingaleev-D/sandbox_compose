@@ -3,6 +3,7 @@ package com.example.sandbox_compose.data.remote
 import com.example.sandbox_compose.data.model.RemoteCategories
 import com.example.sandbox_compose.data.model.RemoteProducts
 import com.example.sandbox_compose.domain.model.CategoriesListModel
+import com.example.sandbox_compose.domain.model.Product
 import com.example.sandbox_compose.domain.model.ProductListModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -43,6 +44,19 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
                mapper = { categories: RemoteCategories ->
                    categories.toCategoriesList()
                })
+    }
+
+    override suspend fun getProductsItem(id: Int): ResultWrapper<ProductListModel> {
+        val url = "${baseUrl}products/${id}"
+
+        return makeWebRequest(
+               url = url,
+               method = HttpMethod.Get,
+               mapper = {
+                   dataModels: RemoteProducts ->
+                   dataModels.toProductList()
+               }
+        )
     }
 
     @OptIn(InternalAPI::class)
@@ -94,6 +108,7 @@ interface ApiService {
 
     suspend fun getProducts(category: Int?): ResultWrapper<ProductListModel>
     suspend fun getCategories(): ResultWrapper<CategoriesListModel>
+    suspend fun getProductsItem(id: Int): ResultWrapper<ProductListModel>
 }
 
 sealed class ResultWrapper<out T> {

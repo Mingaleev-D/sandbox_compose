@@ -7,4 +7,5 @@ class GetProductsUseCase(
 ) {
 
     suspend fun execute(category: Int?) = repository.getProducts(category)
+    suspend fun execute(id: Int) = repository.getProductsItem(id)
 }

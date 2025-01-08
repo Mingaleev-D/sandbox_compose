@@ -14,6 +14,10 @@ class ProductsRepositoryImpl(
         return apiService.getProducts(category = category)
     }
 
+    override suspend fun getProductsItem(id: Int): ResultWrapper<ProductListModel> {
+        return apiService.getProductsItem(id = id)
+    }
+
     override suspend fun getCategories(): ResultWrapper<CategoriesListModel> {
         return apiService.getCategories()
     }

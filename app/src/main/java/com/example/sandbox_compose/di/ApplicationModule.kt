@@ -7,6 +7,7 @@ import com.example.sandbox_compose.domain.repository.ProductsRepository
 import com.example.sandbox_compose.domain.usecase.GetCategoriesUseCase
 import com.example.sandbox_compose.domain.usecase.GetProductsUseCase
 import com.example.sandbox_compose.ui.pages.home_products.HomeViewModel
+import com.example.sandbox_compose.ui.pages.home_products.ProductDetailViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -68,6 +69,9 @@ val useCaseModule = module {
 val viewModelModule = module {
     viewModel {
         HomeViewModel(get(), get())
+    }
+    viewModel {
+        ProductDetailViewModel(get())
     }
 }
 

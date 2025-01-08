@@ -28,13 +28,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import com.example.sandbox_compose.ui.navigator.ProductDetails
+import com.example.sandbox_compose.ui.navigator.UiProductModel
+import com.example.sandbox_compose.ui.navigator.productNavType
 import com.example.sandbox_compose.ui.pages.home_products.HomePage
+import com.example.sandbox_compose.ui.pages.home_products.ProductDetailsPage
 import com.example.sandbox_compose.ui.theme.BlackGreen
 import com.example.sandbox_compose.ui.theme.Purple40
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
+import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
 
@@ -121,12 +129,25 @@ private fun NavigationHost(
         composable(route = NavDestination.Home.route) {
             HomePage(navController = navController)
         }
+        composable<ProductDetails>(
+               typeMap = mapOf(typeOf<UiProductModel>() to productNavType)
+        ) {
+            val productRoute = it.toRoute<ProductDetails>()
+            ProductDetailsPage(
+                   navController = navController,
+                   product = productRoute.product,
+                   onBackClicked = { navController.navigateUp() })
+        }
         composable(
                route = NavDestination.Cart.route
-        ) {}
+        ) {
+            //cart page
+        }
         composable(
                route = NavDestination.Profile.route,
-        ) { }
+        ) {
+            //profile page
+        }
     }
 }
 

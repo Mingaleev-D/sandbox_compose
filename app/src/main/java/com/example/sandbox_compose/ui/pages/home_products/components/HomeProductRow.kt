@@ -19,38 +19,37 @@ import com.example.sandbox_compose.domain.model.Product
 
 @Composable
 fun HomeProductRow(
-    products: List<Product>,
-    title: String
+       products: List<Product>,
+       title: String,
+       onClick: (Product) -> Unit,
 ) {
     Column {
         Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
+               modifier = Modifier
+                   .padding(horizontal = 16.dp)
+                   .fillMaxWidth()
         ) {
             Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(
-                    Alignment.CenterStart
-                ),
-                fontWeight = FontWeight.SemiBold
+                   text = title,
+                   style = MaterialTheme.typography.titleMedium,
+                   modifier = Modifier.align(
+                          Alignment.CenterStart
+                   ),
+                   fontWeight = FontWeight.SemiBold
             )
             Text(
-                text = "View all",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.align(
-                    Alignment.CenterEnd
-                )
+                   text = "View all",
+                   style = MaterialTheme.typography.bodyMedium,
+                   color = MaterialTheme.colorScheme.primary,
+                   modifier = Modifier.align(
+                          Alignment.CenterEnd
+                   )
             )
         }
         Spacer(modifier = Modifier.size(8.dp))
         LazyRow {
             items(products) { product ->
-                ProductItemView(product = product){
-
-                }
+                ProductItemView(product = product, onClick = onClick)
             }
         }
     }

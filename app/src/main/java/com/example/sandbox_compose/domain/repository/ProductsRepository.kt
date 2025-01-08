@@ -7,5 +7,6 @@ import com.example.sandbox_compose.domain.model.ProductListModel
 interface ProductsRepository {
 
     suspend fun getProducts(category: Int?): ResultWrapper<ProductListModel>
+    suspend fun getProductsItem(id: Int): ResultWrapper<ProductListModel>
     suspend fun getCategories(): ResultWrapper<CategoriesListModel>
 }
