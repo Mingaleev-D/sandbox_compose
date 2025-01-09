@@ -6,13 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sandbox_compose.data.mapper.toDomainModelList
-import com.example.sandbox_compose.data.model.RemoteUnsplashImagesItem
 import com.example.sandbox_compose.data.remote.ApiService
-import com.example.sandbox_compose.di.AppModule
 import com.example.sandbox_compose.domain.model.UnsplashImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
 import javax.inject.Inject
 
 @HiltViewModel
