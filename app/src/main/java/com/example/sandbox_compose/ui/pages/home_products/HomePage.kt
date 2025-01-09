@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.sandbox_compose.NavDestination
 import com.example.sandbox_compose.domain.model.Product
 import com.example.sandbox_compose.domain.model.ProductListModel
 import com.example.sandbox_compose.ui.components.LoadingState
@@ -79,6 +80,9 @@ fun HomePage(
                        categories = data.categories,
                        onClick = {
                            navController.navigate(route = ProductDetails(UiProductModel.fromProduct(it)))
+                       },
+                       onCartClick = {
+                           navController.navigate(route = "cart_page")
                        }
                 )
             }
@@ -93,10 +97,13 @@ private fun HomeContent(
        popularProductsBooks: List<Product>,
        categories: List<String>,
        onClick: (Product) -> Unit,
+       onCartClick: () -> Unit
 ) {
     LazyColumn {
         item {
-            ProfileHeader()
+            ProfileHeader(onCartClick = {
+                onCartClick()
+            })
             Spacer(modifier = Modifier.size(12.dp))
             SearchBar(value = "", onTextChanged = {})
             Spacer(modifier = Modifier.size(16.dp))

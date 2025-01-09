@@ -126,7 +126,7 @@ fun CartPage(
                     }
                 }
                 if (shouldShowList) {
-                    Button(onClick = { navController.navigate("${NavDestination.Cart.route}/cartSummaryPage") }, modifier = Modifier.fillMaxWidth()) {
+                    Button(onClick = { navController.navigate("cart_page/cartSummaryPage") }, modifier = Modifier.fillMaxWidth()) {
                         Text(text = "Checkout")
                     }
                 }

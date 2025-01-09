@@ -8,11 +8,13 @@ import com.example.sandbox_compose.domain.repository.OrderRepository
 import com.example.sandbox_compose.domain.repository.ProductsRepository
 import com.example.sandbox_compose.domain.usecase.GetCategoriesUseCase
 import com.example.sandbox_compose.domain.usecase.GetProductsUseCase
+import com.example.sandbox_compose.domain.usecase.OrderListUseCase
 import com.example.sandbox_compose.domain.usecase.PlaceOrderUseCase
 import com.example.sandbox_compose.ui.pages.cart.CartSummaryViewModel
 import com.example.sandbox_compose.ui.pages.cart.CartViewModel
 import com.example.sandbox_compose.ui.pages.home_products.HomeViewModel
 import com.example.sandbox_compose.ui.pages.home_products.ProductDetailViewModel
+import com.example.sandbox_compose.ui.pages.order.OrdersViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -72,6 +74,7 @@ val useCaseModule = module {
     factory { GetProductsUseCase(get()) }
     factory { GetCategoriesUseCase(get()) }
     factory { PlaceOrderUseCase(get()) }
+    factory { OrderListUseCase(get()) }
 }
 val viewModelModule = module {
     viewModel {
@@ -85,6 +88,9 @@ val viewModelModule = module {
     }
     viewModel {
         CartSummaryViewModel(get(), get())
+    }
+    viewModel {
+        OrdersViewModel(get())
     }
 }
 

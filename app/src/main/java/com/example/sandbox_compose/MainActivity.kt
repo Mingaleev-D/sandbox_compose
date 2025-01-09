@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingBasket
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -26,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -45,6 +47,7 @@ import com.example.sandbox_compose.ui.pages.cart.CartSummaryPage
 import com.example.sandbox_compose.ui.pages.cart.user_address.UserAddressPage
 import com.example.sandbox_compose.ui.pages.home_products.HomePage
 import com.example.sandbox_compose.ui.pages.home_products.ProductDetailsPage
+import com.example.sandbox_compose.ui.pages.order.OrdersPage
 import com.example.sandbox_compose.ui.theme.BlackGreen
 import com.example.sandbox_compose.ui.theme.Purple40
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
@@ -58,7 +61,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val items = listOf(
-                   NavDestination.Home, NavDestination.Cart, NavDestination.Profile
+                   NavDestination.Home, NavDestination.Order, NavDestination.Profile
             )
             var selectedIndex by remember { mutableIntStateOf(0) }
 
@@ -76,7 +79,7 @@ class MainActivity : ComponentActivity() {
                                    NavigationBarItem(
                                           icon = {
                                               Icon(
-                                                     imageVector = screen.icon,
+                                                     painter = painterResource(id = screen.iconId),
                                                      contentDescription = null
                                               )
                                           },
@@ -144,16 +147,20 @@ private fun NavigationHost(
                    product = productRoute.product,
                    onBackClicked = { navController.navigateUp() })
         }
-        composable(route = NavDestination.Cart.route) {
+        composable(route = NavDestination.Order.route) {
+            OrdersPage()
+        }
+
+        composable(route = "cart_page") {
             CartPage(navController)
         }
         composable(
-               route = "${NavDestination.Cart.route}/cartSummaryPage"
+               route = "cart_page/cartSummaryPage"
         ) {
             CartSummaryPage(navController = navController)
         }
         composable<UserAddressRoute>(
-           // route = "${NavDestination.Cart.route}/userAddressPage",
+               // route = "${NavDestination.Cart.route}/userAddressPage",
                typeMap = mapOf(typeOf<UserAddressRouteWrapper>() to userAddressNavType)
         ) {
             val userAddressRoute = it.toRoute<UserAddressRoute>()
@@ -173,12 +180,21 @@ private fun NavigationHost(
 sealed class NavDestination(
        val title: String,
        val route: String,
-       val icon: ImageVector
+       val iconId: Int // Храним ID ресурса
 ) {
-
-    object Home : NavDestination(title = "Home", route = "home_screen", icon = Icons.Filled.Home)
-    object Cart :
-           NavDestination(title = "Cart", route = "episodes", icon = Icons.Filled.ShoppingCart)
-
-    object Profile : NavDestination(title = "Profile", route = "search", icon = Icons.Filled.Person)
+    object Home : NavDestination(title = "Home", route = "home_page", iconId = R.drawable.baseline_home_filled_24)
+    object Order : NavDestination(title = "Order", route = "order_page", iconId = R.drawable.baseline_shopping_basket_24)
+    object Profile : NavDestination(title = "Profile", route = "profile_page", iconId = R.drawable.ic_person_24)
 }
+//sealed class NavDestination(
+//       val title: String,
+//       val route: String,
+//       val icon: ImageVector
+//) {
+//
+//    object Home : NavDestination(title = "Home", route = "home_screen", icon = Icons.Filled.Home)
+//    object Order :
+//           NavDestination(title = "Order", route = "episodes", icon = Icons.Filled.ShoppingBasket)
+//
+//    object Profile : NavDestination(title = "Profile", route = "search", icon = Icons.Filled.Person)
+//}

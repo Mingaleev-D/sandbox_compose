@@ -2,6 +2,7 @@ package com.example.sandbox_compose.ui.pages.home_products.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import com.example.sandbox_compose.R
 
 @Composable
-fun ProfileHeader() {
+fun ProfileHeader(
+       onCartClick: () -> Unit
+) {
     Box(
            modifier = Modifier
                .fillMaxWidth()
@@ -52,16 +55,35 @@ fun ProfileHeader() {
                 )
             }
         }
-        Image(
-               painter = painterResource(id = R.drawable.ic_notifications_24),
-               contentDescription = null,
-               modifier = Modifier
-                   .size(48.dp)
-                   .align(Alignment.CenterEnd)
-                   .clip(CircleShape)
-                   .background(Color.LightGray.copy(alpha = 0.3f))
-                   .padding(8.dp),
-               contentScale = ContentScale.Inside
-        )
+        Row(
+               modifier = Modifier.align(Alignment.CenterEnd),
+        ) {
+            Image(
+                   painter = painterResource(id = R.drawable.ic_notifications_24),
+                   contentDescription = null,
+                   modifier = Modifier
+                       .size(48.dp)
+                       // .align(Alignment.CenterEnd)
+                       .clip(CircleShape)
+                       .background(Color.LightGray.copy(alpha = 0.3f))
+                       .padding(8.dp),
+                   contentScale = ContentScale.Inside
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Image(
+                   painter = painterResource(id = R.drawable.baseline_shopping_cart_24),
+                   contentDescription = null,
+                   modifier = Modifier
+                       .size(48.dp)
+                       // .align(Alignment.CenterEnd)
+                       .clip(CircleShape)
+                       .background(Color.LightGray.copy(alpha = 0.3f))
+                       .padding(8.dp)
+                       .clickable {
+                           onCartClick()
+                       },
+                   contentScale = ContentScale.Inside
+            )
+        }
     }
 }

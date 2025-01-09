@@ -49,28 +49,28 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CartSummaryPage(
-       navController: NavController,
-       viewModel: CartSummaryViewModel = koinViewModel()
+    navController: NavController,
+    viewModel: CartSummaryViewModel = koinViewModel()
 ) {
     val address = remember {
         mutableStateOf<UserAddress?>(null)
     }
     Column(
-           modifier = Modifier
-               .fillMaxSize()
-               .padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Box(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .height(60.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
         ) {
             Text(
-                   text = "Cart Summary",
-                   style = MaterialTheme.typography.titleMedium,
-                   modifier = Modifier.align(
-                          Alignment.Center
-                   )
+                text = "Cart Summary",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(
+                    Alignment.Center
+                )
             )
         }
         val uiState = viewModel.uiState.collectAsState()
@@ -83,16 +83,16 @@ fun CartSummaryPage(
         }
 
         Box(
-               modifier = Modifier
-                   .weight(1f)
-                   .fillMaxWidth()
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
         ) {
             when (val event = uiState.value) {
                 is CartSummaryEvent.Loading -> {
                     Column(
-                           horizontalAlignment = Alignment.CenterHorizontally,
-                           verticalArrangement = Arrangement.Center,
-                           modifier = Modifier.align(Alignment.Center)
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.align(Alignment.Center)
                     ) {
                         // Show loading
                         CircularProgressIndicator()
@@ -103,9 +103,9 @@ fun CartSummaryPage(
                 is CartSummaryEvent.Error -> {
                     // Show error
                     Text(
-                           text = event.error,
-                           style = MaterialTheme.typography.titleMedium,
-                           modifier = Modifier.align(Alignment.Center)
+                        text = event.error,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Center)
                     )
                 }
 
@@ -121,27 +121,27 @@ fun CartSummaryPage(
 
                 is CartSummaryEvent.PlaceOrder -> {
                     Column(
-                           modifier = Modifier.fillMaxSize(),
-                           verticalArrangement = Arrangement.Center,
-                           horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
-                               painter = painterResource(id = R.drawable.icon_ok),
-                               contentDescription = null
+                            painter = painterResource(id = R.drawable.icon_ok),
+                            contentDescription = null
                         )
                         Text(
-                               text = "Order Placed: ${event.orderId}",
-                               style = MaterialTheme.typography.titleMedium,
+                            text = "Order Placed: ${event.orderId}",
+                            style = MaterialTheme.typography.titleMedium,
                         )
                         Button(onClick = {
                             navController.popBackStack(
-                                   route = NavDestination.Home.route,
-                                   inclusive = false
+                                route = NavDestination.Home.route,
+                                inclusive = false
                             )
                         }) {
                             Text(
-                                   text = "Continue Shopping",
-                                   style = MaterialTheme.typography.titleSmall
+                                text = "Continue Shopping",
+                                style = MaterialTheme.typography.titleSmall
                             )
                         }
                     }
@@ -150,9 +150,9 @@ fun CartSummaryPage(
         }
         if (uiState.value !is CartSummaryEvent.PlaceOrder) {
             Button(
-                   onClick = { viewModel.placeOrder(address.value!!) },
-                   modifier = Modifier.fillMaxWidth(),
-                   enabled = address.value != null
+                onClick = { viewModel.placeOrder(address.value!!) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = address.value != null
             ) {
                 Text(text = "Checkout", style = MaterialTheme.typography.titleMedium)
             }
@@ -163,18 +163,18 @@ fun CartSummaryPage(
 @Composable
 fun CartSummaryScreenContent(cartSummary: CartSummary) {
     LazyColumn(
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(8.dp)
-               .clip(RoundedCornerShape(16.dp))
-               .background(Color.LightGray.copy(alpha = 0.4f))
-               .padding(8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.LightGray.copy(alpha = 0.4f))
+            .padding(8.dp)
     ) {
         item {
             Text(
-                   text = "Order Summary:",
-                   style = MaterialTheme.typography.titleMedium,
-                   modifier = Modifier.padding(8.dp)
+                text = "Order Summary:",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(8.dp)
             )
         }
         items(cartSummary.data.items) { cartItem ->
@@ -195,36 +195,36 @@ fun CartSummaryScreenContent(cartSummary: CartSummary) {
 @Composable
 fun ProductRow(cartItemModel: CartItemModel) {
     Row(
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(horizontal = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
     ) {
         Text(
-               text = cartItemModel.productName,
-               modifier = Modifier.weight(1f),
-               style = MaterialTheme.typography.bodyMedium
+            text = cartItemModel.productName,
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.bodyMedium
         )
         Text(
-               text = "$${CurrencyUtils.formatPrice(cartItemModel.price)} x ${cartItemModel.quantity}",
-               style = MaterialTheme.typography.titleMedium
+            text = "$${CurrencyUtils.formatPrice(cartItemModel.price)} x ${cartItemModel.quantity}",
+            style = MaterialTheme.typography.titleMedium
         )
     }
 }
 
 @Composable
 fun AmountRow(
-       title: String,
-       amount: Double
+    title: String,
+    amount: Double
 ) {
     Row(
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(horizontal = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
     ) {
         Text(
-               text = title,
-               modifier = Modifier.weight(1f),
-               style = MaterialTheme.typography.bodyMedium
+            text = title,
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.bodyMedium
         )
         Text(text = CurrencyUtils.formatPrice(amount), style = MaterialTheme.typography.titleMedium)
     }
@@ -232,38 +232,38 @@ fun AmountRow(
 
 @Composable
 fun AddressBar(
-       address: String,
-       onClick: () -> Unit
+    address: String,
+    onClick: () -> Unit
 ) {
     Row(
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(horizontal = 8.dp)
-               .clip(RoundedCornerShape(16.dp))
-               .clickable { onClick.invoke() }
-               .padding(horizontal = 8.dp, vertical = 2.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick.invoke() }
+            .padding(horizontal = 8.dp, vertical = 2.dp)
     ) {
         Image(
-               painter = painterResource(id = R.drawable.location_9511220),
-               contentDescription = null,
-               modifier = Modifier
-                   .size(40.dp)
-                   .clip(CircleShape)
-                   .background(Color.LightGray.copy(alpha = 0.4f)),
-               contentScale = ContentScale.Inside
+            painter = painterResource(id = R.drawable.location_9511220),
+            contentDescription = null,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Color.LightGray.copy(alpha = 0.4f)),
+            contentScale = ContentScale.Inside
         )
         Spacer(modifier = Modifier.size(8.dp))
         Column {
             Text(
-                   text = "Shipping Address",
-                   style = MaterialTheme.typography.titleSmall,
-                   fontSize = 16.sp
+                text = "Shipping Address",
+                style = MaterialTheme.typography.titleSmall,
+                fontSize = 16.sp
             )
             Text(
-                   text = address,
-                   style = MaterialTheme.typography.bodySmall,
-                   fontSize = 14.sp,
-                   color = Color.Gray
+                text = address,
+                style = MaterialTheme.typography.bodySmall,
+                fontSize = 14.sp,
+                color = Color.Gray
             )
         }
     }
