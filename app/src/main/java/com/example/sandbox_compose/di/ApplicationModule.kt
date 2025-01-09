@@ -4,17 +4,23 @@ import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.data.remote.ApiServicesImpl
 import com.example.sandbox_compose.data.repository.OrderRepositoryImpl
 import com.example.sandbox_compose.data.repository.ProductsRepositoryImpl
+import com.example.sandbox_compose.data.repository.UserRepositoryImpl
 import com.example.sandbox_compose.domain.repository.OrderRepository
 import com.example.sandbox_compose.domain.repository.ProductsRepository
+import com.example.sandbox_compose.domain.repository.UserRepository
 import com.example.sandbox_compose.domain.usecase.GetCategoriesUseCase
 import com.example.sandbox_compose.domain.usecase.GetProductsUseCase
+import com.example.sandbox_compose.domain.usecase.LoginUseCase
 import com.example.sandbox_compose.domain.usecase.OrderListUseCase
 import com.example.sandbox_compose.domain.usecase.PlaceOrderUseCase
+import com.example.sandbox_compose.domain.usecase.RegisterUseCase
 import com.example.sandbox_compose.ui.pages.cart.CartSummaryViewModel
 import com.example.sandbox_compose.ui.pages.cart.CartViewModel
 import com.example.sandbox_compose.ui.pages.home_products.HomeViewModel
 import com.example.sandbox_compose.ui.pages.home_products.ProductDetailViewModel
 import com.example.sandbox_compose.ui.pages.order.OrdersViewModel
+import com.example.sandbox_compose.ui.pages.user_auth.LoginViewModel
+import com.example.sandbox_compose.ui.pages.user_auth.RegisterViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -69,12 +75,15 @@ val networkModule = module {
 val repositoryModule = module {
     single<ProductsRepository> { ProductsRepositoryImpl(get()) }
     single<OrderRepository> { OrderRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get()) }
 }
 val useCaseModule = module {
     factory { GetProductsUseCase(get()) }
     factory { GetCategoriesUseCase(get()) }
     factory { PlaceOrderUseCase(get()) }
     factory { OrderListUseCase(get()) }
+    factory { LoginUseCase(get()) }
+    factory { RegisterUseCase(get()) }
 }
 val viewModelModule = module {
     viewModel {
@@ -91,6 +100,12 @@ val viewModelModule = module {
     }
     viewModel {
         OrdersViewModel(get())
+    }
+    viewModel {
+        LoginViewModel(get())
+    }
+    viewModel {
+        RegisterViewModel(get())
     }
 }
 

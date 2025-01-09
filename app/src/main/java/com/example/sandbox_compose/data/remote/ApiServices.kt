@@ -14,9 +14,13 @@ import com.example.sandbox_compose.domain.model.CartItemModel
 import com.example.sandbox_compose.domain.model.CartModel
 import com.example.sandbox_compose.domain.model.CartSummary
 import com.example.sandbox_compose.domain.model.CategoriesListModel
+import com.example.sandbox_compose.domain.model.LoginRequest
 import com.example.sandbox_compose.domain.model.OrdersListModel
 import com.example.sandbox_compose.domain.model.Product
 import com.example.sandbox_compose.domain.model.ProductListModel
+import com.example.sandbox_compose.domain.model.RegisterRequest
+import com.example.sandbox_compose.domain.model.UserAuthResponse
+import com.example.sandbox_compose.domain.model.UserDomainModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -58,17 +62,7 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
                    categories.toCategoriesList()
                })
     }
-    //    override suspend fun getProductsItem(id: Int): ResultWrapper<ProductListModel> {
-    //        val url = "${baseUrl}products/${id}"
-    //
-    //        return makeWebRequest(
-    //               url = url,
-    //               method = HttpMethod.Get,
-    //               mapper = { dataModels: RemoteProducts ->
-    //                   dataModels.toProductList()
-    //               }
-    //        )
-    //    }
+
     override suspend fun addProductToCart(request: AddCartRequestModel): ResultWrapper<CartModel> {
         val url = "${baseUrl}cart/1"
         return makeWebRequest(
@@ -139,7 +133,6 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
                               mapper = { orderRes: PlaceOrderResponse ->
                                   orderRes.data.id
                               })
-
     }
 
     override suspend fun getOrderList(): ResultWrapper<OrdersListModel> {
@@ -148,6 +141,33 @@ class ApiServicesImpl(val client: HttpClient) : ApiService {
                               method = HttpMethod.Get,
                               mapper = { ordersResponse: OrdersListResponse ->
                                   ordersResponse.toDomainResponse()
+                              })
+    }
+
+    override suspend fun login(
+           email: String,
+           password: String
+    ): ResultWrapper<UserDomainModel> {
+        val url = "${baseUrl}login"
+        return makeWebRequest(url = url,
+                              method = HttpMethod.Post,
+                              body = LoginRequest(email, password),
+                              mapper = { user: UserAuthResponse ->
+                                  user.data.toDomainModel()
+                              })
+    }
+
+    override suspend fun register(
+           email: String,
+           password: String,
+           name: String
+    ): ResultWrapper<UserDomainModel> {
+        val url = "${baseUrl}signup"
+        return makeWebRequest(url = url,
+                              method = HttpMethod.Post,
+                              body = RegisterRequest(email, password, name),
+                              mapper = { user: UserAuthResponse ->
+                                  user.data.toDomainModel()
                               })
     }
 
@@ -219,6 +239,17 @@ interface ApiService {
     ): ResultWrapper<Long>
 
     suspend fun getOrderList(): ResultWrapper<OrdersListModel>
+
+    suspend fun login(
+           email: String,
+           password: String
+    ): ResultWrapper<UserDomainModel>
+
+    suspend fun register(
+           email: String,
+           password: String,
+           name: String
+    ): ResultWrapper<UserDomainModel>
 }
 
 sealed class ResultWrapper<out T> {

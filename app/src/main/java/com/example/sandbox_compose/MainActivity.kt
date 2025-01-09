@@ -28,11 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.toRoute
@@ -48,6 +52,7 @@ import com.example.sandbox_compose.ui.pages.cart.user_address.UserAddressPage
 import com.example.sandbox_compose.ui.pages.home_products.HomePage
 import com.example.sandbox_compose.ui.pages.home_products.ProductDetailsPage
 import com.example.sandbox_compose.ui.pages.order.OrdersPage
+import com.example.sandbox_compose.ui.pages.user_auth.LoginPage
 import com.example.sandbox_compose.ui.theme.BlackGreen
 import com.example.sandbox_compose.ui.theme.Purple40
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
@@ -65,6 +70,9 @@ class MainActivity : ComponentActivity() {
             )
             var selectedIndex by remember { mutableIntStateOf(0) }
 
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+
             Sandbox_composeTheme {
                 Scaffold(
                        modifier = Modifier
@@ -72,43 +80,46 @@ class MainActivity : ComponentActivity() {
                        // .padding(WindowInsets.safeDrawing.asPaddingValues()),
                        //containerColor = Purple40,
                        bottomBar = {
-                           NavigationBar(
-                                  containerColor = Color.White
-                           ) {
-                               items.forEachIndexed { index, screen ->
-                                   NavigationBarItem(
-                                          icon = {
-                                              Icon(
-                                                     painter = painterResource(id = screen.iconId),
-                                                     contentDescription = null
-                                              )
-                                          },
-                                          label = { Text(screen.title) },
-                                          selected = index == selectedIndex,
-                                          onClick = {
-                                              selectedIndex = index
-                                              navController.navigate(screen.route) {
-                                                  // Pop up to the start destination of the graph to
-                                                  // avoid building up a large stack of destinations
-                                                  // on the back stack as users select items
-                                                  popUpTo(navController.graph.findStartDestination().id) {
-                                                      saveState = true
+                           if(currentRoute != "login_page"){
+                               NavigationBar(
+                                      containerColor = Color.White
+                               ) {
+                                   items.forEachIndexed { index, screen ->
+                                       NavigationBarItem(
+                                              icon = {
+                                                  Icon(
+                                                         painter = painterResource(id = screen.iconId),
+                                                         contentDescription = null
+                                                  )
+                                              },
+                                              label = { Text(screen.title) },
+                                              selected = currentRoute == screen.route, // Используем currentRoute для выделения,
+                                              onClick = {
+                                                  selectedIndex = index
+                                                  navController.navigate(screen.route) {
+                                                      // Pop up to the start destination of the graph to
+                                                      // avoid building up a large stack of destinations
+                                                      // on the back stack as users select items
+                                                      popUpTo(navController.graph.findStartDestination().id) {
+                                                          saveState = true
+                                                      }
+                                                      // Avoid multiple copies of the same destination when
+                                                      // reselecting the same item
+                                                      launchSingleTop = true
+                                                      // Restore state when reselecting a previously selected item
+                                                      restoreState = true
                                                   }
-                                                  // Avoid multiple copies of the same destination when
-                                                  // reselecting the same item
-                                                  launchSingleTop = true
-                                                  // Restore state when reselecting a previously selected item
-                                                  restoreState = true
-                                              }
-                                          },
-                                          colors = NavigationBarItemDefaults.colors(
-                                                 selectedIconColor = BlackGreen,
-                                                 selectedTextColor = BlackGreen,
-                                                 indicatorColor = Color.Transparent
-                                          )
-                                   )
+                                              },
+                                              colors = NavigationBarItemDefaults.colors(
+                                                     selectedIconColor = BlackGreen,
+                                                     selectedTextColor = BlackGreen,
+                                                     indicatorColor = Color.Transparent
+                                              )
+                                       )
+                                   }
                                }
                            }
+
                        }
                 ) { innerPadding ->
                     NavigationHost(
@@ -135,6 +146,11 @@ private fun NavigationHost(
                //.background(color = Purple40)
                .padding(innerPadding)
     ) {
+
+        composable(route = "login_page") {
+            LoginPage(navController)
+        }
+
         composable(route = NavDestination.Home.route) {
             HomePage(navController = navController)
         }
