@@ -17,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FullImageViewModel @Inject constructor(
        private val repository: ImageRepository,
+       private val downloader: com.example.sandbox_compose.domain.repository.Downloader,
        savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -34,6 +35,16 @@ class FullImageViewModel @Inject constructor(
             try {
                 val result = repository.getImage(imageId)
                 image = result
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun downloadImage(url: String, title: String?) {
+        viewModelScope.launch {
+            try {
+                downloader.downloadFile(url, title)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

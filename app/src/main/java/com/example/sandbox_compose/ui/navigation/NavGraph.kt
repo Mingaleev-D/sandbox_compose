@@ -14,6 +14,7 @@ import com.example.sandbox_compose.ui.pages.full_image.FullImagePage
 import com.example.sandbox_compose.ui.pages.full_image.FullImageViewModel
 import com.example.sandbox_compose.ui.pages.home.HomePage
 import com.example.sandbox_compose.ui.pages.home.HomeViewModel
+import com.example.sandbox_compose.ui.pages.profile.ProfilePage
 import com.example.sandbox_compose.ui.pages.search.SearchPage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,12 +57,20 @@ fun NavGraphSetup(
             FullImagePage(
                    image = fullImageViewModel.image,
                    onBackClick = { navController.navigateUp() },
-                   onPhotographerImgClick = {
-
+                   onPhotographerNameClick = { profileLinks ->
+                       navController.navigate(Routes.ProfilePage(profileLinks))
+                   },
+                   onImageDownloadClick = { imageId, imageUrl ->
+                       fullImageViewModel.downloadImage(imageId, imageUrl)
                    }
             )
         }
-        composable<Routes.ProfilePage> {
+        composable<Routes.ProfilePage> { backStackEntry ->
+            val profileLink = backStackEntry.toRoute<Routes.ProfilePage>().profileLink
+            ProfilePage(
+                   profileLink = profileLink,
+                   onBackClick = { navController.navigateUp() }
+            )
         }
     }
 }

@@ -1,13 +1,17 @@
 package com.example.sandbox_compose.di
 
 
+import android.content.Context
 import com.example.sandbox_compose.data.remote.ApiService
+import com.example.sandbox_compose.data.repository.AndroidImageDownloader
 import com.example.sandbox_compose.data.repository.ImageRepositoryImpl
+import com.example.sandbox_compose.domain.repository.Downloader
 import com.example.sandbox_compose.domain.repository.ImageRepository
 import com.example.sandbox_compose.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -74,5 +78,13 @@ object AppModule {
     @Singleton
     fun provideRepository(apiService: ApiService): ImageRepository {
         return ImageRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAndroidImageDownloader(
+           @ApplicationContext context: Context
+    ): Downloader {
+        return AndroidImageDownloader(context)
     }
 }
