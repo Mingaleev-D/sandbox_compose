@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.sandbox_compose.ui.pages.favorites.FavoritesPage
 import com.example.sandbox_compose.ui.pages.full_image.FullImagePage
+import com.example.sandbox_compose.ui.pages.full_image.FullImageViewModel
 import com.example.sandbox_compose.ui.pages.home.HomePage
 import com.example.sandbox_compose.ui.pages.home.HomeViewModel
 import com.example.sandbox_compose.ui.pages.search.SearchPage
@@ -48,11 +49,16 @@ fun NavGraphSetup(
                    onBackClick = { navController.navigateUp() }
             )
         }
-        composable<Routes.FullImagePage> { backStackEntry ->
-            val imageId = backStackEntry.toRoute<Routes.FullImagePage>().imageId
+        composable<Routes.FullImagePage> {
+            //            backStackEntry ->
+            //            val imageId = backStackEntry.toRoute<Routes.FullImagePage>().imageId
+            val fullImageViewModel = hiltViewModel<FullImageViewModel>()
             FullImagePage(
-                   imageId = imageId,
-                   onBackClick = { navController.navigateUp() }
+                   image = fullImageViewModel.image,
+                   onBackClick = { navController.navigateUp() },
+                   onPhotographerImgClick = {
+
+                   }
             )
         }
         composable<Routes.ProfilePage> {
