@@ -18,7 +18,9 @@ import com.example.sandbox_compose.domain.model.UnsplashImage
 fun ImagesVerticalGrid(
        modifier: Modifier = Modifier,
        images: List<UnsplashImage?>,
-       onImageClick: (String) -> Unit
+       onImageClick: (String) -> Unit,
+       onImageDragStart: (UnsplashImage?) -> Unit,
+       onImageDragEnd: () -> Unit
 ) {
     LazyVerticalStaggeredGrid(
            modifier = modifier,
@@ -32,6 +34,14 @@ fun ImagesVerticalGrid(
                    image = image,
                    modifier = Modifier
                        .clickable { image?.id?.let { onImageClick(it) } }
+                       .pointerInput(Unit) {
+                           detectDragGesturesAfterLongPress(
+                                  onDragStart = { onImageDragStart(image) },
+                                  onDragCancel = { onImageDragEnd() },
+                                  onDragEnd = { onImageDragEnd() },
+                                  onDrag = { _, _ -> }
+                           )
+                       }
             )
         }
     }

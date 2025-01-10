@@ -90,6 +90,6 @@ dependencies {
     // optional - Jetpack Compose integration
     implementation("androidx.paging:paging-compose:3.3.5")
 
-    implementation("com.github.skydoves:cloudy:0.2.4")
+    implementation("com.github.skydoves:cloudy:0.1.2")
 
 }

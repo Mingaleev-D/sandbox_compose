@@ -5,16 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sandbox_compose.data.mapper.toDomainModelList
-import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.domain.model.UnsplashImage
+import com.example.sandbox_compose.domain.repository.ImageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-       private val apiService: ApiService
+       private val repository: ImageRepository
 ) : ViewModel() {
 
     var images: List<UnsplashImage> by mutableStateOf(emptyList())
@@ -26,9 +25,9 @@ class HomeViewModel @Inject constructor(
 
     private fun getImages() = viewModelScope.launch {
         try {
-            val response = apiService.getEditorialListImages()
+            val response = repository.getEditorialFeedImages()
             // Handle the response (e.g., parse JSON)
-            images = response.toDomainModelList() // Update the state with the response (might need parsing)
+            images = response // Update the state with the response (might need parsing)
         } catch (e: Exception) {
             // Handle network errors or other exceptions
             e.printStackTrace()

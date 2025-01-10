@@ -10,6 +10,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -18,6 +22,7 @@ import com.example.sandbox_compose.R
 import com.example.sandbox_compose.domain.model.UnsplashImage
 import com.example.sandbox_compose.ui.pages.components.ImageTopAppBar
 import com.example.sandbox_compose.ui.pages.components.ImagesVerticalGrid
+import com.example.sandbox_compose.ui.pages.components.ZoomedImageCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,6 +34,8 @@ fun HomePage(
        onSearchClick: () -> Unit,
        onFABClick: () -> Unit
 ) {
+    var showImagePreview by remember { mutableStateOf(false) }
+    var activeImage by remember { mutableStateOf<UnsplashImage?>(null) }
     Box(
            modifier = modifier.fillMaxSize()
     ) {
@@ -42,7 +49,12 @@ fun HomePage(
             )
             ImagesVerticalGrid(
                    images = images,
-                   onImageClick = onImageClick
+                   onImageClick = onImageClick,
+                   onImageDragStart = { image ->
+                       activeImage = image
+                       showImagePreview = true
+                   },
+                   onImageDragEnd = {showImagePreview = false}
             )
         }
         FloatingActionButton(
@@ -58,5 +70,11 @@ fun HomePage(
                    tint = MaterialTheme.colorScheme.onBackground
             )
         }
+
+        ZoomedImageCard(
+               modifier = Modifier.padding(20.dp),
+               isVisible = showImagePreview,
+               image = activeImage
+        )
     }
 }

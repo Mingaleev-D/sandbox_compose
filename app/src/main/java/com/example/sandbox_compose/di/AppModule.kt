@@ -2,6 +2,8 @@ package com.example.sandbox_compose.di
 
 
 import com.example.sandbox_compose.data.remote.ApiService
+import com.example.sandbox_compose.data.repository.ImageRepositoryImpl
+import com.example.sandbox_compose.domain.repository.ImageRepository
 import com.example.sandbox_compose.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -68,9 +70,9 @@ object AppModule {
         return retrofit.create(ApiService::class.java)
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideRepository(apiService: ApiService): HoroscopeRepository {
-//        return HoroscopeRepositoryImpl(apiService)
-//    }
+    @Provides
+    @Singleton
+    fun provideRepository(apiService: ApiService): ImageRepository {
+        return ImageRepositoryImpl(apiService)
+    }
 }
