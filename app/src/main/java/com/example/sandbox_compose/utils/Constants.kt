@@ -7,6 +7,8 @@ object Constants {
 
     const val IMAGE_VISTA_DATABASE = "unsplash_images.db"
     const val FAVORITE_IMAGE_TABLE = "favorite_images_table"
+    const val UNSPLASH_IMAGE_TABLE = "images_table"
+    const val REMOTE_KEYS_TABLE = "remote_keys_table"
 }
 val searchKeywords: List<String> = listOf(
        "Landscape",

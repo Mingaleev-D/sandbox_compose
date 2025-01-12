@@ -14,7 +14,10 @@ interface ApiService {
            "Authorization: Client-ID ${Constants.API_KEY}"
     )
     @GET("photos")
-    suspend fun getEditorialListImages(): List<RemoteUnsplashImagesItem>
+    suspend fun getEditorialListImages(
+           @Query("page") page: Int,
+           @Query("per_page") perPage: Int
+    ): List<RemoteUnsplashImagesItem>
 
     @Headers(
            "Authorization: Client-ID ${Constants.API_KEY}"

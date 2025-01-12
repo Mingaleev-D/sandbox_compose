@@ -4,11 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-       entities = [FavoriteImageEntity::class],
+       entities = [FavoriteImageEntity::class, UnsplashImageEntity::class, UnsplashRemoteKeys::class],
        version = 1,
        exportSchema = false
 )
-abstract class ImageVistaDatabase : RoomDatabase() {
-
+abstract class ImageVistaDatabase: RoomDatabase() {
     abstract fun favoriteImagesDao(): FavoriteImagesDao
+
+    abstract fun editorialFeedDao(): EditorialFeedDao
 }

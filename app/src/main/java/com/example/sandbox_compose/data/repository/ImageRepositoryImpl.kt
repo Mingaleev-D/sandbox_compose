@@ -1,13 +1,14 @@
 package com.example.sandbox_compose.data.repository
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.sandbox_compose.data.local.ImageVistaDatabase
 import com.example.sandbox_compose.data.mapper.toDomainModel
-import com.example.sandbox_compose.data.mapper.toDomainModelList
 import com.example.sandbox_compose.data.mapper.toFavoriteImageEntity
+import com.example.sandbox_compose.data.paging.EditorialFeedRemoteMediator
 import com.example.sandbox_compose.data.paging.SearchPagingSource
 import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.domain.model.UnsplashImage
@@ -16,15 +17,25 @@ import com.example.sandbox_compose.utils.Constants.ITEMS_PER_PAGE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+@OptIn(ExperimentalPagingApi::class)
 class ImageRepositoryImpl(
        private val apiService: ApiService,
        private val database: ImageVistaDatabase
 ) : ImageRepository {
 
     private val favoriteImagesDao = database.favoriteImagesDao()
+    private val editorialFeedDao = database.editorialFeedDao()
 
-    override suspend fun getEditorialFeedImages(): List<UnsplashImage> {
-        return apiService.getEditorialListImages().toDomainModelList()
+    override fun getEditorialFeedImages(): Flow<PagingData<UnsplashImage>> {
+        return Pager(
+               config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+               remoteMediator = EditorialFeedRemoteMediator(apiService, database),
+               pagingSourceFactory = { editorialFeedDao.getAllEditorialFeedImages() }
+        )
+            .flow
+            .map { pagingData ->
+                pagingData.map { it.toDomainModel() }
+            }
     }
 
     override suspend fun getImage(imageId: String): UnsplashImage {

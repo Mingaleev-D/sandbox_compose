@@ -32,23 +32,27 @@ fun NavGraphSetup(
        searchQuery: String,
        onSearchQueryChange: (String) -> Unit,
 ) {
-    val viewModel = hiltViewModel<HomeViewModel>()
 
     NavHost(
            navController = navController,
            startDestination = Routes.HomePage
     ) {
         composable<Routes.HomePage> {
-            HomePage(
+            val homeViewModel: HomeViewModel = hiltViewModel()
+            val images = homeViewModel.images.collectAsLazyPagingItems()
+            val favoriteImageIds by homeViewModel.favoriteImageIds.collectAsStateWithLifecycle()
+            HomePage (
                    snackbarHostState = snackbarHostState,
-                   snackbarEvent = viewModel.snackbarEvent,
+                   snackbarEvent = homeViewModel.snackbarEvent,
                    scrollBehavior = scrollBehavior,
-                   images = viewModel.images,
+                   images = images,
+                   favoriteImageIds = favoriteImageIds,
                    onImageClick = { imageId ->
                        navController.navigate(Routes.FullImagePage(imageId))
                    },
                    onSearchClick = { navController.navigate(Routes.SearchPage) },
-                   onFABClick = { navController.navigate(Routes.FavoritesPage) }
+                   onFABClick = { navController.navigate(Routes.FavoritesPage) },
+                   onToggleFavoriteStatus = { homeViewModel.toggleFavoriteStatus(it) }
             )
         }
         composable<Routes.SearchPage> {
