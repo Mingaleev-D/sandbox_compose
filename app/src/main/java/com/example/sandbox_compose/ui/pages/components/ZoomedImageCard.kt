@@ -20,14 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.memory.MemoryCache
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.example.sandbox_compose.domain.model.UnsplashImage
-import com.example.sandbox_compose.domain.model.sampleImage
 import com.skydoves.cloudy.Cloudy
 
 @Composable
@@ -81,11 +79,11 @@ fun ZoomedImageCard(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ZoomedImageCardPreview() {
-    ZoomedImageCard(
-           image = sampleImage,
-           isVisible = true
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun ZoomedImageCardPreview() {
+//    ZoomedImageCard(
+//           image = sampleImage,
+//           isVisible = true
+//    )
+//}

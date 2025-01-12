@@ -63,15 +63,15 @@ fun HomePage(
                    scrollBehavior = scrollBehavior,
                    onSearchClick = onSearchClick
             )
-            ImagesVerticalGrid(
-                   images = images,
-                   onImageClick = onImageClick,
-                   onImageDragStart = { image ->
-                       activeImage = image
-                       showImagePreview = true
-                   },
-                   onImageDragEnd = {showImagePreview = false}
-            )
+//            ImagesVerticalGrid(
+//                   images = images,
+//                   onImageClick = onImageClick,
+//                   onImageDragStart = { image ->
+//                       activeImage = image
+//                       showImagePreview = true
+//                   },
+//                   onImageDragEnd = {showImagePreview = false}
+//            )
         }
         FloatingActionButton(
                onClick = onFABClick,

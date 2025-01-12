@@ -17,7 +17,7 @@ import com.example.sandbox_compose.domain.model.UnsplashImage
 @Composable
 fun ImagesVerticalGrid(
        modifier: Modifier = Modifier,
-       images: List<UnsplashImage?>,
+       images: LazyPagingItems<UnsplashImage>,
        onImageClick: (String) -> Unit,
        onImageDragStart: (UnsplashImage?) -> Unit,
        onImageDragEnd: () -> Unit
@@ -29,7 +29,8 @@ fun ImagesVerticalGrid(
            verticalItemSpacing = 10.dp,
            horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(images) { image ->
+        items(count = images.itemCount) {index ->
+            val image = images[index]
             ImageCard(
                    image = image,
                    modifier = Modifier
