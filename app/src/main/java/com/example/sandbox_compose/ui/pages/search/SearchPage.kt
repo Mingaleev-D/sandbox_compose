@@ -51,11 +51,13 @@ fun SearchPage(
        snackbarHostState: SnackbarHostState,
        searchedImages: LazyPagingItems<UnsplashImage>,
        snackbarEvent: Flow<SnackbarEvent>,
+       favoriteImageIds: List<String>,
        searchQuery: String,
        onSearchQueryChange: (String) -> Unit,
        onBackClick: () -> Unit,
        onSearch: (String) -> Unit,
        onImageClick: (String) -> Unit,
+       onToggleFavoriteStatus: (UnsplashImage) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -142,11 +144,13 @@ fun SearchPage(
             ImagesVerticalGrid(
                    images = searchedImages,
                    onImageClick = onImageClick,
+                   favoriteImageIds = favoriteImageIds,
                    onImageDragStart = { image ->
                        activeImage = image
                        showImagePreview = true
                    },
-                   onImageDragEnd = { showImagePreview = false }
+                   onImageDragEnd = { showImagePreview = false },
+                   onToggleFavoriteStatus = onToggleFavoriteStatus
             )
         }
         ZoomedImageCard(

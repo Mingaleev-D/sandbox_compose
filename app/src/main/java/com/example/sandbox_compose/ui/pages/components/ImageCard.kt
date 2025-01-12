@@ -12,14 +12,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -28,35 +26,6 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.example.sandbox_compose.domain.model.UnsplashImage
-
-@Composable
-fun ImageCard(
-       modifier: Modifier = Modifier,
-       image: UnsplashImage?
-) {
-    val imageRequest = ImageRequest.Builder(LocalContext.current)
-        .data(image?.imageUrlSmall)
-        .crossfade(true)
-        .build()
-    val aspectRatio: Float by remember {
-        derivedStateOf { (image?.width?.toFloat() ?: 1f) / (image?.height?.toFloat() ?: 1f) }
-    }
-
-    Card(
-           shape = RoundedCornerShape(10.dp),
-           modifier = Modifier
-               .fillMaxWidth()
-               .aspectRatio(aspectRatio)
-               .then(modifier)
-    ) {
-        AsyncImage(
-               model = imageRequest,
-               contentDescription = null,
-               contentScale = ContentScale.FillBounds,
-               modifier = Modifier.fillMaxSize()
-        )
-    }
-}
 
 @Composable
 fun ImageCard(
@@ -74,16 +43,11 @@ fun ImageCard(
     }
 
     Card(
-           // shape = RoundedCornerShape(16.dp),
+           shape = RoundedCornerShape(10.dp),
            modifier = Modifier
                .fillMaxWidth()
-               .shadow(
-                      ambientColor = MaterialTheme.colorScheme.primary,
-                      elevation = 6.dp,
-                      shape = RoundedCornerShape(16.dp)
-               )
                .aspectRatio(aspectRatio)
-               .then(modifier),
+               .then(modifier)
     ) {
         Box {
             AsyncImage(

@@ -4,6 +4,9 @@ object Constants {
     const val BASE_URL = "https://api.unsplash.com/"
     const val API_KEY = "Zaum147fRClIsh85RLtgQHNDyXcZSY086Ru233J8VPA"
     const val ITEMS_PER_PAGE = 10
+
+    const val IMAGE_VISTA_DATABASE = "unsplash_images.db"
+    const val FAVORITE_IMAGE_TABLE = "favorite_images_table"
 }
 val searchKeywords: List<String> = listOf(
        "Landscape",

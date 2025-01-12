@@ -1,7 +1,8 @@
 package com.example.sandbox_compose.di
 
-
 import android.content.Context
+import androidx.room.Room
+import com.example.sandbox_compose.data.local.ImageVistaDatabase
 import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.data.repository.AndroidImageDownloader
 import com.example.sandbox_compose.data.repository.ImageRepositoryImpl
@@ -10,6 +11,7 @@ import com.example.sandbox_compose.domain.repository.Downloader
 import com.example.sandbox_compose.domain.repository.ImageRepository
 import com.example.sandbox_compose.domain.repository.NetworkConnectivityObserver
 import com.example.sandbox_compose.utils.Constants.BASE_URL
+import com.example.sandbox_compose.utils.Constants.IMAGE_VISTA_DATABASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -81,8 +83,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(apiService: ApiService): ImageRepository {
-        return ImageRepositoryImpl(apiService)
+    fun provideRepository(
+           apiService: ApiService,
+           database: ImageVistaDatabase
+    ): ImageRepository {
+        return ImageRepositoryImpl(
+               apiService = apiService,
+               database = database
+        )
     }
 
     @Provides
@@ -106,5 +114,19 @@ object AppModule {
            scope: CoroutineScope
     ): NetworkConnectivityObserver {
         return NetworkConnectivityObserverImpl(context, scope)
+    }
+
+    @Provides
+    @Singleton
+    fun provideImageVistaDatabase(
+           @ApplicationContext context: Context
+    ): ImageVistaDatabase {
+        return Room
+            .databaseBuilder(
+                   context,
+                   ImageVistaDatabase::class.java,
+                   IMAGE_VISTA_DATABASE
+            )
+            .build()
     }
 }
