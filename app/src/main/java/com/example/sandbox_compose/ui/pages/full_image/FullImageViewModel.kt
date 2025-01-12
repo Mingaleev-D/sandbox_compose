@@ -10,8 +10,12 @@ import androidx.navigation.toRoute
 import com.example.sandbox_compose.domain.model.UnsplashImage
 import com.example.sandbox_compose.domain.repository.ImageRepository
 import com.example.sandbox_compose.ui.navigation.Routes
+import com.example.sandbox_compose.utils.SnackbarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +30,9 @@ class FullImageViewModel @Inject constructor(
     var image: UnsplashImage? by mutableStateOf(null)
         private set
 
+    private val _snackbarEvent = Channel<SnackbarEvent>()
+    val snackbarEvent = _snackbarEvent.receiveAsFlow()
+
     init {
         getImage()
     }
@@ -35,8 +42,14 @@ class FullImageViewModel @Inject constructor(
             try {
                 val result = repository.getImage(imageId)
                 image = result
+            } catch (e: UnknownHostException) {
+                _snackbarEvent.send(
+                       SnackbarEvent(message = "No Internet connection. Please check you network.")
+                )
             } catch (e: Exception) {
-                e.printStackTrace()
+                _snackbarEvent.send(
+                       SnackbarEvent(message = "Something went wrong: ${e.message}")
+                )
             }
         }
     }
@@ -46,7 +59,9 @@ class FullImageViewModel @Inject constructor(
             try {
                 downloader.downloadFile(url, title)
             } catch (e: Exception) {
-                e.printStackTrace()
+                _snackbarEvent.send(
+                       SnackbarEvent(message = "Something went wrong: ${e.message}")
+                )
             }
         }
     }

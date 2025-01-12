@@ -8,8 +8,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,10 +25,14 @@ import com.example.sandbox_compose.domain.model.UnsplashImage
 import com.example.sandbox_compose.ui.pages.components.ImageTopAppBar
 import com.example.sandbox_compose.ui.pages.components.ImagesVerticalGrid
 import com.example.sandbox_compose.ui.pages.components.ZoomedImageCard
+import com.example.sandbox_compose.utils.SnackbarEvent
+import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(
+       snackbarHostState: SnackbarHostState,
+       snackbarEvent: Flow<SnackbarEvent>,
        modifier: Modifier = Modifier,
        images: List<UnsplashImage>,
        scrollBehavior: TopAppBarScrollBehavior,
@@ -36,6 +42,16 @@ fun HomePage(
 ) {
     var showImagePreview by remember { mutableStateOf(false) }
     var activeImage by remember { mutableStateOf<UnsplashImage?>(null) }
+
+    LaunchedEffect(key1 = true) {
+        snackbarEvent.collect { event ->
+            snackbarHostState.showSnackbar(
+                   message = event.message,
+                   duration = event.duration
+            )
+        }
+    }
+
     Box(
            modifier = modifier.fillMaxSize()
     ) {

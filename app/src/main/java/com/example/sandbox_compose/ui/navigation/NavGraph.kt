@@ -1,6 +1,7 @@
 package com.example.sandbox_compose.ui.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,7 +22,8 @@ import com.example.sandbox_compose.ui.pages.search.SearchPage
 @Composable
 fun NavGraphSetup(
        navController: NavHostController,
-       scrollBehavior: TopAppBarScrollBehavior
+       scrollBehavior: TopAppBarScrollBehavior,
+       snackbarHostState: SnackbarHostState
 ) {
     val viewModel = hiltViewModel<HomeViewModel>()
 
@@ -31,6 +33,8 @@ fun NavGraphSetup(
     ) {
         composable<Routes.HomePage> {
             HomePage(
+                   snackbarHostState = snackbarHostState,
+                   snackbarEvent = viewModel.snackbarEvent,
                    scrollBehavior = scrollBehavior,
                    images = viewModel.images,
                    onImageClick = { imageId ->
@@ -55,6 +59,8 @@ fun NavGraphSetup(
             //            val imageId = backStackEntry.toRoute<Routes.FullImagePage>().imageId
             val fullImageViewModel = hiltViewModel<FullImageViewModel>()
             FullImagePage(
+                   snackbarHostState = snackbarHostState,
+                   snackbarEvent = fullImageViewModel.snackbarEvent,
                    image = fullImageViewModel.image,
                    onBackClick = { navController.navigateUp() },
                    onPhotographerNameClick = { profileLinks ->

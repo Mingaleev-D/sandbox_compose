@@ -75,6 +75,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")

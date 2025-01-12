@@ -20,6 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -47,14 +48,18 @@ import com.example.sandbox_compose.ui.pages.components.DownloadOptionsBottomShee
 import com.example.sandbox_compose.ui.pages.components.FullImageViewTopBar
 import com.example.sandbox_compose.ui.pages.components.ImageDownloadOption
 import com.example.sandbox_compose.ui.pages.components.ImageVistaLoadingBar
+import com.example.sandbox_compose.utils.SnackbarEvent
 import com.example.sandbox_compose.utils.rememberWindowInsetsController
 import com.example.sandbox_compose.utils.toggleStatusBars
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlin.math.max
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FullImagePage(
+       snackbarHostState: SnackbarHostState,
+       snackbarEvent: Flow<SnackbarEvent>,
        image: UnsplashImage?,
        onPhotographerNameClick: (String) -> Unit,
        onImageDownloadClick: (String, String?) -> Unit,
@@ -75,6 +80,15 @@ fun FullImagePage(
     )
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isDownloadBottomSheetOpen by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = true) {
+        snackbarEvent.collect { event ->
+            snackbarHostState.showSnackbar(
+                   message = event.message,
+                   duration = event.duration
+            )
+        }
+    }
 
     LaunchedEffect(key1 = Unit) {
         windowInsetsController.toggleStatusBars(show = showBars)

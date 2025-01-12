@@ -5,14 +5,19 @@ import android.content.Context
 import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.data.repository.AndroidImageDownloader
 import com.example.sandbox_compose.data.repository.ImageRepositoryImpl
+import com.example.sandbox_compose.data.repository.NetworkConnectivityObserverImpl
 import com.example.sandbox_compose.domain.repository.Downloader
 import com.example.sandbox_compose.domain.repository.ImageRepository
+import com.example.sandbox_compose.domain.repository.NetworkConnectivityObserver
 import com.example.sandbox_compose.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -86,5 +91,20 @@ object AppModule {
            @ApplicationContext context: Context
     ): Downloader {
         return AndroidImageDownloader(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideApplicationScope(): CoroutineScope {
+        return CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNetworkConnectivityObserver(
+           @ApplicationContext context: Context,
+           scope: CoroutineScope
+    ): NetworkConnectivityObserver {
+        return NetworkConnectivityObserverImpl(context, scope)
     }
 }
