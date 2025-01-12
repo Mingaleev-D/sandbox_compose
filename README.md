@@ -2,6 +2,20 @@ sandbox_compose
 
 ветка
 ```
+  dev/image_app
+```
+
+https://github.com/user-attachments/assets/9d512a3e-77ca-4a7d-bb00-5c96db157f96
+
+![Screenshot_20250112_222758](https://github.com/user-attachments/assets/47eb1c39-9566-417f-99d6-d70f41f99d0f)
+![Screenshot_20250112_222848](https://github.com/user-attachments/assets/ef193e3c-762e-482d-b145-a12032148dc3)
+![Screenshot_20250112_222906](https://github.com/user-attachments/assets/c2347009-2513-472e-84e7-639b7c0a7a87)
+![Screenshot_20250112_222931](https://github.com/user-attachments/assets/c2542a1f-fc2f-4d7a-9b64-151da1981b45)
+![Screenshot_20250112_222959](https://github.com/user-attachments/assets/91384469-3053-4b41-ad1f-ebda353703d2)
+![Screenshot_20250112_223123](https://github.com/user-attachments/assets/cfdc792f-6f9b-44dc-a139-48cb6b2cea8f)
+
+ветка
+```
   dev/rick_morty
 ```
 
