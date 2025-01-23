@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sandbox_compose.domain.model.GameUIModel
 import com.example.sandbox_compose.domain.repository.GamesRepository
+import com.example.sandbox_compose.ui.pages.components.FilterType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -52,10 +53,31 @@ class GamesViewModel @Inject constructor(
             println()
         }
     }
+
+    fun onEvent(event: GameEvent) {
+        when(event) {
+            is GameEvent.ChangeFilter -> {
+                if(event.filter != gameState.selectedFilter) {
+                    gameState = gameState.copy(
+                           selectedFilter = event.filter
+                    )
+                }
+
+            }
+            is GameEvent.OnFameClick -> TODO()
+        }
+    }
 }
 
 data class GamesState(
        val gamesList: List<GameUIModel> = emptyList(),
        val upComingGames: List<GameUIModel> = emptyList(),
-       val isLoading: Boolean = false
+       val isLoading: Boolean = false,
+       val selectedFilter: FilterType = FilterType.POLARITY,
+       val filterGames: List<GameUIModel> = emptyList()
 )
+
+sealed class GameEvent {
+    data class ChangeFilter(val filter: FilterType) : GameEvent()
+    data class OnFameClick(val gameId: Int) : GameEvent()
+}

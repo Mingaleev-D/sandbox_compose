@@ -13,13 +13,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.sandbox_compose.ui.pages.components.GameListComp
 import com.example.sandbox_compose.ui.pages.components.HeaderGamesComp
 import com.example.sandbox_compose.ui.pages.components.LoadingBarComp
+import com.example.sandbox_compose.ui.pages.components.RecommendedComp
 
 @Composable
 fun GamesPage(
        modifier: Modifier = Modifier,
-       gameViewModel: GamesViewModel = hiltViewModel()
+       viewModel: GamesViewModel = hiltViewModel()
 ) {
-    val state = gameViewModel.gameState
+    val state = viewModel.gameState
 
     LazyColumn(
            modifier = modifier.fillMaxSize()
@@ -43,6 +44,21 @@ fun GamesPage(
                 GameListComp(
                        title = "Upcoming Games",
                        postersImg = state.upComingGames.map { it.thumbnail }
+                )
+            }
+        }
+
+        if (!state.isLoading) {
+            item {
+                Spacer(modifier = Modifier.height(10.dp))
+                RecommendedComp(
+                       selected = state.selectedFilter,
+                       gameList = state.gamesList,
+                       onFilterClick = {
+                           viewModel.onEvent(GameEvent.ChangeFilter(it))
+                       },
+                       onGamesClick = {
+                       }
                 )
             }
         }
