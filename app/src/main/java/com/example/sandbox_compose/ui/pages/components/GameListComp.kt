@@ -3,6 +3,7 @@ package com.example.sandbox_compose.ui.pages.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,6 +51,7 @@ fun GameListComp(
                ),
                modifier = Modifier.padding(start = 16.dp)
         )
+        Spacer(modifier = Modifier.height(5.dp))
         LazyRow(
                contentPadding = PaddingValues(
                       horizontal = 10.dp,
