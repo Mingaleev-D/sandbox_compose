@@ -4,14 +4,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.sandbox_compose.ui.pages.components.GameListComp
+import com.example.sandbox_compose.ui.pages.components.GamePosterSize
 import com.example.sandbox_compose.ui.pages.components.HeaderGamesComp
+import com.example.sandbox_compose.ui.pages.components.ImageFilterComp
 import com.example.sandbox_compose.ui.pages.components.LoadingBarComp
 import com.example.sandbox_compose.ui.pages.components.RecommendedComp
 
@@ -22,24 +27,42 @@ fun GamesPage(
 ) {
     val state = viewModel.gameState
 
-    LazyColumn(
+
+    LazyVerticalGrid(
+           columns = GridCells.Fixed(2),
            modifier = modifier.fillMaxSize()
     ) {
-        item {
+        //
+        // header
+        item(
+               span = {
+                   GridItemSpan(2)
+               }
+        ) {
             HeaderGamesComp()
         }
-
+        //
+        //All Games
         if (state.gamesList.isNotEmpty()) {
-            item {
+            item(
+                   span = {
+                       GridItemSpan(2)
+                   }
+            ) {
                 GameListComp(
                        title = "All Games",
                        postersImg = state.gamesList.map { it.thumbnail }
                 )
             }
         }
-
+        //
+        //Upcoming
         if (state.upComingGames.isNotEmpty()) {
-            item {
+            item(
+                   span = {
+                       GridItemSpan(2)
+                   }
+            ) {
                 Spacer(modifier = Modifier.height(10.dp))
                 GameListComp(
                        title = "Upcoming Games",
@@ -47,18 +70,27 @@ fun GamesPage(
                 )
             }
         }
-
+        //
+        //ImageFilter
         if (!state.isLoading) {
-            item {
+            item(
+                   span = {
+                       GridItemSpan(2)
+                   }
+            ) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RecommendedComp(
                        selected = state.selectedFilter,
-                       gameList = state.gamesList,
                        onFilterClick = {
                            viewModel.onEvent(GameEvent.ChangeFilter(it))
                        },
-                       onGamesClick = {
-                       }
+                )
+            }
+            items(state.filterGames) {
+                ImageFilterComp(
+                       imageUrl = it.thumbnail,
+                       posterSize = GamePosterSize.SMALL,
+                       onClick = {}
                 )
             }
         }

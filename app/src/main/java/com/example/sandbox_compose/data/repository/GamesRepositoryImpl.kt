@@ -1,10 +1,7 @@
 package com.example.sandbox_compose.data.repository
 
-import android.net.http.HttpEngine
-import android.net.http.HttpException
 import com.example.sandbox_compose.data.mapper.toUIModelList
 import com.example.sandbox_compose.data.remote.ApiService
-import com.example.sandbox_compose.domain.model.GameUIModel
 import com.example.sandbox_compose.domain.repository.GamesRepository
 import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
@@ -19,6 +16,10 @@ class GamesRepositoryImpl @Inject constructor(
 
     override suspend fun getUpcomingGames() = resultOf {
         apiService.getUpcomingGames().toUIModelList()
+    }
+
+    override suspend fun getRecommendedGames(itemSort: String) = resultOf {
+        apiService.getRecommendedGames(itemSort).toUIModelList()
     }
 }
 

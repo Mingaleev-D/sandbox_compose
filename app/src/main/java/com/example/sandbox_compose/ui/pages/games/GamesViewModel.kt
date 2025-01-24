@@ -27,7 +27,8 @@ class GamesViewModel @Inject constructor(
             supervisorScope {
                 val gamesList = launch { getGamesList() }
                 val upComingGames = launch { getUpcomingGames() }
-                listOf(gamesList, upComingGames).forEach { it.join() }
+                val filtered = launch { getRecommendedGames() }
+                listOf(gamesList, upComingGames, filtered).forEach { it.join() }
                 gameState = gameState.copy(isLoading = false)
             }
         }
@@ -55,17 +56,40 @@ class GamesViewModel @Inject constructor(
     }
 
     fun onEvent(event: GameEvent) {
-        when(event) {
+        when (event) {
             is GameEvent.ChangeFilter -> {
-                if(event.filter != gameState.selectedFilter) {
+                if (event.filter != gameState.selectedFilter) {
                     gameState = gameState.copy(
                            selectedFilter = event.filter
                     )
+                    viewModelScope.launch {
+                        getRecommendedGames()
+                    }
                 }
 
             }
+
             is GameEvent.OnFameClick -> TODO()
         }
+    }
+
+    /*
+enum class FilterType(val text: String) {
+RELEVANCE("relevance"),
+POLARITY("popularity"),
+RELEASE_DATE("release-date")
+}
+ */
+    private suspend fun getRecommendedGames() {
+        val result = when (gameState.selectedFilter) {
+            FilterType.RELEVANCE -> gamesRepository.getRecommendedGames("relevance")
+            FilterType.POLARITY -> gamesRepository.getRecommendedGames("popularity")
+            FilterType.RELEASE_DATE -> gamesRepository.getRecommendedGames("release-date")
+        }
+        result.onSuccess {
+            gameState = gameState.copy(filterGames = it)
+        }.onFailure { println() }
+
     }
 }
 

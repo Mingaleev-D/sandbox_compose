@@ -13,4 +13,9 @@ interface ApiService {
     suspend fun getUpcomingGames(
            @Query("sort-by") sortBy: String = "alphabetical"
     ): List<RemoteGameListItem>
+
+    @GET("games")
+    suspend fun getRecommendedGames(
+           @Query("sort-by") sortBy: String
+    ): List<RemoteGameListItem>
 }
