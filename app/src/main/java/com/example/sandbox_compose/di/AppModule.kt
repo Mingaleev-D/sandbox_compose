@@ -3,7 +3,9 @@ package com.example.sandbox_compose.di
 import android.app.Application
 import com.example.sandbox_compose.data.remote.ApiService
 import com.example.sandbox_compose.data.repository.LocalUserManagerRepositoryImpl
+import com.example.sandbox_compose.data.repository.NewsRepositoryImpl
 import com.example.sandbox_compose.domain.repository.LocalUserManagerRepository
+import com.example.sandbox_compose.domain.repository.NewsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +24,7 @@ object AppModule {
 
     @Provides
     fun provideBaseUrl(): String {
-        return ""
+        return "https://newsapi.org/v2/"
     }
 
     @Provides
@@ -77,13 +79,14 @@ object AppModule {
     ): LocalUserManagerRepository {
         return LocalUserManagerRepositoryImpl(application)
     }
-    //    @Provides
-    //    @Singleton
-    //    fun provideRepository(
-    //           apiService: ApiService,
-    //    ): MovieRepository {
-    //        return MovieRepositoryImpl(
-    //               apiService = apiService,
-    //        )
-    //    }
+
+    @Provides
+    @Singleton
+    fun provideRepository(
+           apiService: ApiService,
+    ): NewsRepository {
+        return NewsRepositoryImpl(
+               apiService = apiService,
+        )
+    }
 }

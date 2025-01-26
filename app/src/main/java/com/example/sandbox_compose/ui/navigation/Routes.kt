@@ -11,5 +11,5 @@ sealed class Routes(
     object DetailsPages : Routes("details")
     object AppStartNavigation: Routes("app_start")
     object NewsNavigation: Routes("newsNav")
-   // object NewsNavigationPage: Routes("newsNavPages") //NewsNavigationPage
+    object NewsNavigationPage: Routes("newsNavPages") //NewsNavigationPage
 }

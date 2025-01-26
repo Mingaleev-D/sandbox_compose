@@ -89,4 +89,14 @@ dependencies {
     //Compose Foundation
     implementation("androidx.compose.foundation:foundation:1.4.3")
 
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    val paging_version = "3.3.5"
+    implementation ("androidx.paging:paging-runtime:$paging_version")
+    implementation ("androidx.paging:paging-compose:3.3.5")
+    implementation("androidx.paging:paging-compose-android:3.3.5")
+
 }
