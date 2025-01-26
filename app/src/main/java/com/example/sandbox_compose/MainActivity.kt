@@ -23,30 +23,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
+import com.example.sandbox_compose.domain.usecase.ReadAppEntryUseCase
+import com.example.sandbox_compose.domain.usecase.SaveAppEntryUseCase
+import com.example.sandbox_compose.ui.navigation.NavGraphSetup
+import com.example.sandbox_compose.ui.pages.onboarding.OnboardingPage
+import com.example.sandbox_compose.ui.pages.onboarding.OnboardingViewModel
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
+
+
         setContent {
             Sandbox_composeTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                }
+                val viewModelOnBoard: OnboardingViewModel = hiltViewModel()
+                NavGraphSetup(
+                       startDestination = viewModelOnBoard.startDestination.value
+                )
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Sandbox_composeTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            Text(text = "Hello")
         }
     }
 }
