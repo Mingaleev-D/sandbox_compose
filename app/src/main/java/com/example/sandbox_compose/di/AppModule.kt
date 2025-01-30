@@ -2,21 +2,21 @@ package com.example.sandbox_compose.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.sandbox_compose.data.local.HeadlineDao
-import com.example.sandbox_compose.data.local.HeadlineDto
-import com.example.sandbox_compose.data.local.HeadlineRemoteKeyDao
-import com.example.sandbox_compose.data.local.NewsyArticleDatabase
-import com.example.sandbox_compose.data.mapper.ArticleHeadlineDtoMapper
-import com.example.sandbox_compose.data.mapper.HeadlineMapper
-import com.example.sandbox_compose.data.mapper.Mapper
-import com.example.sandbox_compose.data.model.ArticleDTO
-import com.example.sandbox_compose.data.remote.ApiService
-import com.example.sandbox_compose.data.repository.HeadlineRepositoryImpl
-import com.example.sandbox_compose.domain.model.NewsyArticle
-import com.example.sandbox_compose.domain.repository.HeadlineRepository
-import com.example.sandbox_compose.domain.usecase.FetchHeadlineArticleUseCase
-import com.example.sandbox_compose.domain.usecase.HeadlineUseCases
-import com.example.sandbox_compose.domain.usecase.UpdateHeadlineFavouriteUseCase
+import com.example.sandbox_compose.core.data.mapper.Mappers
+import com.example.sandbox_compose.feature.headline.data.local.HeadlineDao
+import com.example.sandbox_compose.feature.headline.data.local.HeadlineDto
+import com.example.sandbox_compose.feature.headline.data.local.HeadlineRemoteKeyDao
+import com.example.sandbox_compose.feature.headline.data.local.NewsyArticleDatabase
+import com.example.sandbox_compose.feature.headline.data.mapper.ArticleHeadlineDtoMapper
+import com.example.sandbox_compose.feature.headline.data.mapper.HeadlineMapper
+import com.example.sandbox_compose.core.data.model.ArticleDTO
+import com.example.sandbox_compose.core.data.remote.ApiService
+import com.example.sandbox_compose.feature.headline.data.repository.HeadlineRepositoryImpl
+import com.example.sandbox_compose.feature.headline.domain.model.NewsyArticle
+import com.example.sandbox_compose.feature.headline.domain.repository.HeadlineRepository
+import com.example.sandbox_compose.feature.headline.domain.usecase.FetchHeadlineArticleUseCase
+import com.example.sandbox_compose.feature.headline.domain.usecase.HeadlineUseCases
+import com.example.sandbox_compose.feature.headline.domain.usecase.UpdateHeadlineFavouriteUseCase
 import com.example.sandbox_compose.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -92,8 +92,8 @@ object AppModule {
     fun provideHeadlineRepository(
            api: ApiService,
            database: NewsyArticleDatabase,
-           mapper: Mapper<HeadlineDto, NewsyArticle>,
-           articleHeadlineMapper: Mapper<ArticleDTO, HeadlineDto>,
+           mapper: Mappers<HeadlineDto, NewsyArticle>,
+           articleHeadlineMapper: Mappers<ArticleDTO, HeadlineDto>,
     ): HeadlineRepository {
         return HeadlineRepositoryImpl(
                headlineApi = api,
@@ -150,10 +150,10 @@ object AppModule {
     // ============================= mapper ================================
     @Provides
     @Singleton
-    fun provideArticleToHeadlineMapper(): Mapper<ArticleDTO, HeadlineDto> = ArticleHeadlineDtoMapper()
+    fun provideArticleToHeadlineMapper(): Mappers<ArticleDTO, HeadlineDto> = ArticleHeadlineDtoMapper()
 
     @Provides
     @Singleton
-    fun provideHeadlineMapper(): Mapper<HeadlineDto, NewsyArticle> = HeadlineMapper()
+    fun provideHeadlineMapper(): Mappers<HeadlineDto, NewsyArticle> = HeadlineMapper()
     // ==========================================================================
 }

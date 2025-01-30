@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.sandbox_compose.ui.pages.home.HomePage
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +36,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             Sandbox_composeTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
+                    HomePage(
+                           onViewMoreClicked = {},
+                           onHeadlineItemClick = {},
+                           openDrawer = { },
+                           onSearchClicked = {}
+                    )
                 }
             }
         }
