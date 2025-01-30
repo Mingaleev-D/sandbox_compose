@@ -6,7 +6,7 @@ import com.example.sandbox_compose.core.data.mapper.Mappers
 import com.example.sandbox_compose.feature.headline.data.local.HeadlineDao
 import com.example.sandbox_compose.feature.headline.data.local.HeadlineDto
 import com.example.sandbox_compose.feature.headline.data.local.HeadlineRemoteKeyDao
-import com.example.sandbox_compose.feature.headline.data.local.NewsyArticleDatabase
+import com.example.sandbox_compose.core.data.local.NewsyArticleDatabase
 import com.example.sandbox_compose.feature.headline.data.mapper.ArticleHeadlineDtoMapper
 import com.example.sandbox_compose.feature.headline.data.mapper.HeadlineMapper
 import com.example.sandbox_compose.core.data.model.ArticleDTO

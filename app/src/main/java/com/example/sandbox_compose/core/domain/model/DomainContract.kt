@@ -1,8 +1,8 @@
-package com.example.sandbox_compose.feature.headline.data.local
+package com.example.sandbox_compose.core.domain.model
 
-abstract class LocalContractDto {
-    abstract val id: Int
-    abstract val author: String
+abstract  class DomainContract {
+    abstract val id:Int
+    abstract val author:String
     abstract val content: String
     abstract val description: String
     abstract val publishedAt: String

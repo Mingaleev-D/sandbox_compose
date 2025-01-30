@@ -1,6 +1,7 @@
 package com.example.sandbox_compose.core.data.model
 
 
+import com.example.sandbox_compose.feature.discover.data.local.DiscoverArticleDto
 import com.example.sandbox_compose.feature.headline.data.local.HeadlineDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -25,37 +26,37 @@ data class ArticleDTO(
     val urlToImage: String? = null
 )
 
-//fun ArticleDTO.toDiscoverArticle(page: Int, category: String): DiscoverArticleDto {
-//    return DiscoverArticleDto(
-//           author = author,
-//           content = content ?: "empty value",
-//           description = description ?: " empty value",
-//           publishedAt = publishedAt,
-//           title = title,
-//           source = source.name,
-//           category = category,
-//           url = url,
-//           urlToImage = urlToImage,
-//           page = page
-//    )
-//}
-//
-//fun ArticleDTO.toHeadlineArticle(page: Int,category: String): HeadlineDto {
-//    return HeadlineDto(
-//           author = formatEmptyValue(author, "author"),
-//           content = formatEmptyValue(content, "content"),
-//           description = formatEmptyValue(description, "description"),
-//           publishedAt = publishedAt ?: "",
-//           source = source?.name ?: "",
-//           title = title ?: "",
-//           url = url ?: "",
-//           urlToImage = urlToImage,
-//           page = page,
-//           category = category
-//    )
-//}
-//
-//
-//private fun formatEmptyValue(value: String?, default: String = ""): String {
-//    return value ?: "Unknown $default"
-//}
+fun ArticleDTO.toDiscoverArticle(page: Int, category: String): DiscoverArticleDto {
+    return DiscoverArticleDto(
+           author = author ?: "empty value",
+           content = content ?: "empty value",
+           description = description ?: " empty value",
+           publishedAt = publishedAt ?: "",
+           title = title ?: "",
+           source = source?.name ?: "",
+           category = category,
+           url = url ?: "",
+           urlToImage = urlToImage,
+           page = page
+    )
+}
+
+fun ArticleDTO.toHeadlineArticle(page: Int,category: String): HeadlineDto {
+    return HeadlineDto(
+           author = formatEmptyValue(author, "author"),
+           content = formatEmptyValue(content, "content"),
+           description = formatEmptyValue(description, "description"),
+           publishedAt = publishedAt ?: "",
+           source = source?.name ?: "",
+           title = title ?: "",
+           url = url ?: "",
+           urlToImage = urlToImage,
+           page = page,
+           category = category
+    )
+}
+
+
+private fun formatEmptyValue(value: String?, default: String = ""): String {
+    return value ?: "Unknown $default"
+}

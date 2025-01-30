@@ -1,5 +1,7 @@
 package com.example.sandbox_compose.feature.headline.domain.model
 
+import com.example.sandbox_compose.core.domain.model.DomainContract
+
 data class NewsyArticle(
        override val id: Int,
        override val author: String,

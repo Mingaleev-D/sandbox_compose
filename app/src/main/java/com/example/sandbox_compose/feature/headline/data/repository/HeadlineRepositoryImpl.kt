@@ -9,7 +9,7 @@ import com.example.sandbox_compose.core.data.mapper.Mappers
 import com.example.sandbox_compose.core.data.model.ArticleDTO
 import com.example.sandbox_compose.core.data.remote.ApiService
 import com.example.sandbox_compose.feature.headline.data.local.HeadlineDto
-import com.example.sandbox_compose.feature.headline.data.local.NewsyArticleDatabase
+import com.example.sandbox_compose.core.data.local.NewsyArticleDatabase
 import com.example.sandbox_compose.feature.headline.data.paging.HeadlineRemoteMediator
 import com.example.sandbox_compose.feature.headline.domain.model.NewsyArticle
 import com.example.sandbox_compose.feature.headline.domain.repository.HeadlineRepository
