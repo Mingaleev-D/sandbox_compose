@@ -40,7 +40,8 @@ class MainActivity : ComponentActivity() {
                            onViewMoreClicked = {},
                            onHeadlineItemClick = {},
                            openDrawer = { },
-                           onSearchClicked = {}
+                           onSearchClicked = {},
+                           onDiscoverItemClick = {}
                     )
                 }
             }

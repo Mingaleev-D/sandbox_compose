@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
@@ -18,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sandbox_compose.R
 import com.example.sandbox_compose.ui.theme.Sandbox_composeTheme
@@ -32,16 +35,25 @@ fun HomeTopAppBar(
        scrollBehaviour: TopAppBarScrollBehavior = TopAppBarDefaults
            .enterAlwaysScrollBehavior(topAppBarState),
 ) {
-    val title = "Newsy"
+    val title = "github.com/Mingaleev-D"
     CenterAlignedTopAppBar(
            title = {
-               Image(
-                      painter = painterResource(R.drawable.ic_newsy_water_mark),
-                      contentDescription = title,
-                      contentScale = ContentScale.Inside,
-                      colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                      modifier = Modifier.fillMaxWidth()
+               Text(
+                      text = title,
+                      style = MaterialTheme.typography.titleLarge.copy(
+                             fontWeight = FontWeight.Bold,
+                             fontStyle = FontStyle.Normal
+
+                      ),
+                      color = MaterialTheme.colorScheme.primary,
                )
+//               Image(
+//                      painter = painterResource(R.drawable.ic_newsy_water_mark),
+//                      contentDescription = title,
+//                      contentScale = ContentScale.Inside,
+//                      colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+//                      modifier = Modifier.fillMaxWidth()
+//               )
            },
            navigationIcon = {
                IconButton(onClick = openDrawer) {

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.sandbox_compose.feature.discover.domain.usecase.DiscoverUseCases
 import com.example.sandbox_compose.feature.headline.domain.model.NewsyArticle
 import com.example.sandbox_compose.feature.headline.domain.usecase.HeadlineUseCases
 import com.example.sandbox_compose.utils.ArticleCategory
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
        private val headlineUseCases: HeadlineUseCases,
+       private val discoverUseCases: DiscoverUseCases,
 ) : ViewModel() {
 
     var homeState by mutableStateOf(HomeState())
@@ -36,6 +38,12 @@ class HomeViewModel @Inject constructor(
                       category = homeState.selectedHeadlineCategory.category,
                       countryCode = Utils.countryCodeList[0].code,
                       languageCode = Utils.languageCodeList[0].code
+               ).cachedIn(viewModelScope),
+               discoverArticles =
+               discoverUseCases.fetchDiscoverArticleUseCase(
+                      category = homeState.selectedDiscoverCategory.category,
+                      language = "en",
+                      country = "us"
                ).cachedIn(viewModelScope)
         )
     }
@@ -57,19 +65,50 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             }
+
+            is HomeUIEvents.OnDiscoverFavouriteChange -> {
+
+            }
         }
+    }
+
+    private fun updateCategory(homeUIEvents: HomeUIEvents.CategoryChange) {
+        homeState = homeState.copy(
+               selectedDiscoverCategory = homeUIEvents.category
+        )
+        // TODO:1 Remove category update since this is directly updated when saving
+        viewModelScope.launch {
+            discoverUseCases.updateCurrentCategoryUseCase(
+                   homeState.selectedDiscoverCategory.category
+            )
+        }
+    }
+
+    private fun updateDiscoverArticles() {
+        val data = discoverUseCases.fetchDiscoverArticleUseCase(
+               category = homeState.selectedDiscoverCategory.category,
+               language = "en",
+               country = "us"
+        ).cachedIn(viewModelScope)
+        homeState = homeState.copy(
+               discoverArticles = data
+        )
+
     }
 }
 
 sealed class HomeUIEvents {
-    object ViewMoreClicked : HomeUIEvents()
-    data class ArticleClicked(val url: String) : HomeUIEvents()
+    object ViewMoreClicked:HomeUIEvents()
+    data class ArticleClicked(val url:String):HomeUIEvents()
     data class CategoryChange(val category: ArticleCategory) : HomeUIEvents()
     data class PreferencePanelToggle(val isOpen: Boolean) : HomeUIEvents()
     data class OnHeadLineFavouriteChange(val article: NewsyArticle) : HomeUIEvents()
+    data class OnDiscoverFavouriteChange(val article: NewsyArticle) : HomeUIEvents()
 }
 
 data class HomeState(
        val headlineArticles: Flow<PagingData<NewsyArticle>> = emptyFlow(),
+       val discoverArticles: Flow<PagingData<NewsyArticle>> = emptyFlow(),
+       val selectedDiscoverCategory: ArticleCategory = ArticleCategory.SPORTS,
        val selectedHeadlineCategory: ArticleCategory = ArticleCategory.BUSINESS,
 )
